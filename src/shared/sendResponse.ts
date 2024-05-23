@@ -25,4 +25,3 @@ const sendResponse = <T>(res: Response, data: IApiReponse<T>): void => {
 };
 
 export default sendResponse;
-

@@ -8,18 +8,17 @@ const router = express.Router();
 router.post(
   '/create-employee',
   validateRequest(UserValidation.create),
-  UserController.createEmployee
+  UserController.createEmployee,
 );
 router.post(
   '/create-power',
   validateRequest(UserValidation.createpower),
-  UserController.createPower
+  UserController.createPower,
 );
 
-
-// router.post(
-//   '/create-admin',
-//   UserController.createAdmin
-// );
+router.post(
+  '/create-admin',
+  UserController.createAdmin
+);
 
 export const UserRoutes = router;

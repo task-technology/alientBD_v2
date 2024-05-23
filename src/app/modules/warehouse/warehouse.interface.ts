@@ -1,3 +1,3 @@
 export type IWarehouseFilterRequest = {
-    searchTerm?: string
-}
+  searchTerm?: string;
+};

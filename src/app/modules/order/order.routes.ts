@@ -8,15 +8,11 @@ const router = express.Router();
 router.post(
   '/create',
   validateRequest(orderValidation.create),
-  orderController.insertIntoDB
+  orderController.insertIntoDB,
 );
 
-router.get('/',
-  orderController.getAllFromDB
-);
+router.get('/', orderController.getAllFromDB);
 
-router.get('/:id',
-  orderController.getByIdFromDB
-);
+router.get('/:id', orderController.getByIdFromDB);
 
 export const orderRoutes = router;

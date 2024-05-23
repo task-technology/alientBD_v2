@@ -9,15 +9,11 @@ const router = express.Router();
 router.post(
   '/create',
   validateRequest(customerValidation.create),
-  CustomerController.insertIntoDB
+  CustomerController.insertIntoDB,
 );
 
-router.get('/',
-  CustomerController.getAllFromDB
-);
+router.get('/', CustomerController.getAllFromDB);
 
-router.get('/:id',
-  CustomerController.getByIdFromDB
-);
+router.get('/:id', CustomerController.getByIdFromDB);
 
 export const customerRoutes = router;

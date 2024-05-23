@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/v1', routes);
 
-app.use(morgan('dev'))
+app.use(morgan('dev'));
 
 //global error handler
 app.use(globalErrorHandler);

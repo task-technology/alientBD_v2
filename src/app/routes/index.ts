@@ -11,38 +11,37 @@ import { warehouseRoutes } from '../modules/warehouse/warehouse.routes';
 const router = express.Router();
 
 const moduleRoutes = [
-
   {
-    path: "/",
-    routes: AuthRoutes
+    path: '/',
+    routes: AuthRoutes,
   },
   {
-    path: "/auth/user",
-    routes: UserRoutes
+    path: '/auth/user',
+    routes: UserRoutes,
   },
   {
-    path: "/user",
-    routes: employeeRoutes
+    path: '/user',
+    routes: employeeRoutes,
   },
   {
-    path: "/customer",
-    routes: customerRoutes
+    path: '/customer',
+    routes: customerRoutes,
   },
   {
-    path: "/product",
-    routes: productRoutes
+    path: '/products',
+    routes: productRoutes,
   },
   {
-    path: "/order",
-    routes: orderRoutes
+    path: '/order',
+    routes: orderRoutes,
   },
   {
-    path: "/warehouse",
-    routes: warehouseRoutes
+    path: '/warehouse',
+    routes: warehouseRoutes,
   },
   {
-    path: "/warehouse-products",
-    routes: warehouseProductRoutes
+    path: '/warehouse-products',
+    routes: warehouseProductRoutes,
   },
 ];
 

@@ -19,7 +19,6 @@ async function bootstrap() {
     console.log(`Application listening on port ${config.port}`);
   });
   const exitHandler = () => {
-
     if (server) {
       server.close(() => {
         logger.info('Server closed');

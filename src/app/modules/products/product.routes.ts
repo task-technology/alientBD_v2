@@ -8,26 +8,19 @@ const router = express.Router();
 router.post(
   '/create',
   validateRequest(ProductValidation.create),
-  ProductController.insertIntoDB
+  ProductController.insertIntoDB,
 );
 
-router.get('/',
-ProductController.getAllFromDB
-  );
+router.get('/', ProductController.getAllFromDB);
 
-router.get('/:id',
-ProductController.getByIdFromDB
-);
+router.get('/:id', ProductController.getByIdFromDB);
 
 router.patch(
   '/:id',
   validateRequest(ProductValidation.update),
-  ProductController.updateOneInDB
+  ProductController.updateOneInDB,
 );
 
-router.delete(
-  '/:id',
-  ProductController.deleteByIdFromDB
-);
+router.delete('/:id', ProductController.deleteByIdFromDB);
 
 export const productRoutes = router;
