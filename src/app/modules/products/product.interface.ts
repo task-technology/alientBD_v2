@@ -14,6 +14,6 @@ export type ProductCreatedEvent = {
     name: string;
     brand: string;
     purchaseCost: number;
-    unit: string;
+    unit: "pics" | "kg";
     remainderQty:number
 };

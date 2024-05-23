@@ -10,9 +10,9 @@ import { ILoginUser, ILoginUserResponse } from "./auth.interface";
 import { isPasswordMatched, isUserExist } from "./auth.utils";
 
 async function loginUser(payload: ILoginUser): Promise<ILoginUserResponse> {
-    const { id, password } = payload;
+    const { email:userEmail, password } = payload;
 
-    const user = await isUserExist(id);
+    const user = await isUserExist(userEmail);
 
     if (!user) {
         throw new ApiError(httpStatus.NOT_FOUND, 'User does not exist');
@@ -22,7 +22,7 @@ async function loginUser(payload: ILoginUser): Promise<ILoginUserResponse> {
         throw new ApiError(httpStatus.UNAUTHORIZED, 'Password is incorrect');
     }
 
-    const { email, role, } = user;
+    const { email, role,powers } = user;
 
     const secret = config.jwt.secret;
 
@@ -31,13 +31,13 @@ async function loginUser(payload: ILoginUser): Promise<ILoginUserResponse> {
     }
 
     const accessToken = jwt.sign(
-        { email, role },
+        { email, role,powers },
         secret,
         { expiresIn: config.jwt.expires_in }
     );
 
     const refreshToken = jwt.sign(
-        { email, role },
+        { email, role,powers },
         secret,
         { expiresIn: config.jwt.refresh_expires_in }
     );
@@ -52,31 +52,31 @@ async function loginUser(payload: ILoginUser): Promise<ILoginUserResponse> {
 
 const resetPassword = async (payload: { email: string; newPassword: string }, token: string) => {
     const { email, newPassword } = payload;
-  
+
     // Find the user by id
     const user = await prisma.user.findUnique({ where: { email } });
-  
+
     if (!user) {
-      throw new ApiError(httpStatus.BAD_REQUEST, "User not found!");
+        throw new ApiError(httpStatus.BAD_REQUEST, "User not found!");
     }
-  
+
     const isVerified = await jwtHelpers.verifyToken(token, config.jwt.secret as string);
-  
+
     if (!isVerified) {
-      throw new ApiError(httpStatus.UNAUTHORIZED, "Token verification failed!");
+        throw new ApiError(httpStatus.UNAUTHORIZED, "Token verification failed!");
     }
-  
+
     // Hash the new password
     const hashedPassword = await bcrypt.hash(newPassword, Number(config.bcrypt_salt_rounds));
-  
+
     // Update the user's password
     await prisma.user.update({
-      where: { email },
-      data: { password: hashedPassword },
+        where: { email },
+        data: { password: hashedPassword },
     });
-  };
+};
 
-  
+
 
 export const AuthService = {
     loginUser,

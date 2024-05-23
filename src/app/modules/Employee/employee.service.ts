@@ -68,8 +68,11 @@ const getByIdFromDB = async (id: number): Promise<UserDetails | null> => {
             id
         },
         include:{
-            user:true
-            
+            powers:{
+                select:{
+                    id:true
+                }
+            }
         }
     });
     return result;

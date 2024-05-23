@@ -3,25 +3,25 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model User {
   id        Int          @id @default(autoincrement())
   email     String       @unique
-  password  String       
+  password  String
   role      String
   details   UserDetails?
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
+
   @@map("users")
 }
 
 model UserDetails {
   id            Int      @id @default(autoincrement())
   userId        Int      @unique
-  powerId       Int
   user          User     @relation(fields: [userId], references: [id])
   email         String   @unique
   name          String
@@ -32,7 +32,7 @@ model UserDetails {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   createdOrders Order[]  @relation("CreatedOrders")
-  power         Power    @relation(fields: [powerId], references: [id])
+  powers        Power[]  @relation("UserDetailsPowers")
 
   @@map("userDetails")
 }
@@ -128,15 +128,9 @@ model OrderProduct {
 model Power {
   id          Int           @id @default(autoincrement())
   name        String        @unique
+  users       UserDetails[] @relation("UserDetailsPowers")
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @default(now())
-  UserDetails UserDetails[]
 
   @@map("powers")
-}
-
-enum Unit {
-  pcs
-  kg
-  liter
 }

@@ -17,13 +17,23 @@ const create = z.object({
         designation: z.string({
             required_error: 'designation is required'
         }),
-        powerId: z.number({
-            required_error: 'power is required'
-        }),
+        powerId: z.array(
+            z.number({
+                required_error: 'power is required'
+            })
+        ),
 
+    })
+});
+const createpower = z.object({
+    body: z.object({
+        name: z.string({
+            required_error: 'name is required'
+        }),
     })
 });
 
 export const UserValidation = {
     create,
+    createpower
 };

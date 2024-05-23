@@ -5,7 +5,7 @@ export type CreateUserInput ={
     designation: string;
     profileImage: string;
     role: string;
-    powerId: number;
+    powerId: number[];
   }
 
 

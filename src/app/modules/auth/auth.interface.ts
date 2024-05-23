@@ -1,7 +1,7 @@
 import { ENUM_USER_ROLE } from "../../../enums/user";
 
 export type ILoginUser = {
-    id: string;
+  email: string;
     password: string;
   };
   

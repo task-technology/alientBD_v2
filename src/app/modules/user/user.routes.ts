@@ -10,6 +10,11 @@ router.post(
   validateRequest(UserValidation.create),
   UserController.createEmployee
 );
+router.post(
+  '/create-power',
+  validateRequest(UserValidation.createpower),
+  UserController.createPower
+);
 
 
 // router.post(

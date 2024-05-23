@@ -18,6 +18,19 @@ const createEmployee: RequestHandler = catchAsync(
         });
     }
 );
+const createPower: RequestHandler = catchAsync(
+    async (req: Request, res: Response) => {
+        // const { email, password, powerId, name, contactNo,designation,profileImage } = req.body;
+
+        const result = await userService.createPower(req.body.name);
+        sendResponse(res, {
+            statusCode: 200,
+            success: true,
+            message: 'power created successfully!',
+            data: result,
+        });
+    }
+);
 
 // const createAdmin: RequestHandler = catchAsync(
 //     async (req: Request, res: Response) => {
@@ -35,6 +48,7 @@ const createEmployee: RequestHandler = catchAsync(
 
 export const UserController = {
     createEmployee,
+    createPower
     // createAdmin,
 
 };
