@@ -33,7 +33,70 @@ const getAllFromDB = async (
     andConditions.push({
       OR: productSearchableFields.map(field => ({
         [field]: {
-          contains: searchTerm.toLowerCase(),
+          contains: searchTerm,
+          mode: 'insensitive',
+        },
+      })),
+    });
+  }
+
+  if (Object.keys(filterData).length > 0) {
+    andConditions.push({
+      AND: Object.entries(filterData).map(([field, value]) => ({
+        [field]: value,
+      })),
+    });
+  }
+
+  const whereConditions: Prisma.ProductWhereInput =
+    andConditions.length > 0 ? { AND: andConditions } : {};
+
+  const result = await prisma.product.findMany({
+    where: whereConditions,
+    skip,
+    take: limit,
+    orderBy:
+      options.sortBy && options.sortOrder
+        ? { [options.sortBy]: options.sortOrder }
+        : {
+            createdAt: 'desc',
+          },
+  });
+
+  const total = await prisma.product.count({
+    where: whereConditions,
+  });
+
+  return {
+    meta: {
+      total,
+      page,
+      limit,
+    },
+    data: result,
+  };
+};
+
+const getAvailableQtyFromDB = async (
+  filters: IEmployeeFilterRequest,
+  options: IPaginationOptions,
+): Promise<IGenericResponse<Product[]>> => {
+  const { limit, page, skip } = paginationHelpers.calculatePagination(options);
+  const { searchTerm, ...filterData } = filters;
+
+  const andConditions = [];
+
+  andConditions.push({
+    availableQty: {
+      gt: 0,
+    },
+  });
+  if (searchTerm) {
+    andConditions.push({
+      OR: productSearchableFields.map(field => ({
+        [field]: {
+          contains: searchTerm,
+          mode: 'insensitive',
         },
       })),
     });
@@ -116,4 +179,5 @@ export const ProductService = {
   getByIdFromDB,
   updateOneInDB,
   deleteByIdFromDB,
+  getAvailableQtyFromDB,
 };

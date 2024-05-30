@@ -22,7 +22,7 @@ async function loginUser(payload: ILoginUser): Promise<ILoginUserResponse> {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Password is incorrect');
   }
 
-  const { email, role, powers } = user;
+  const { id, email, role, powers } = user;
 
   const secret = config.jwt.secret;
 
@@ -30,11 +30,11 @@ async function loginUser(payload: ILoginUser): Promise<ILoginUserResponse> {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'secret is not defined');
   }
 
-  const accessToken = jwt.sign({ email, role, powers }, secret, {
+  const accessToken = jwt.sign({ id, email, role, powers }, secret, {
     expiresIn: config.jwt.expires_in,
   });
 
-  const refreshToken = jwt.sign({ email, role, powers }, secret, {
+  const refreshToken = jwt.sign({ id, email, role, powers }, secret, {
     expiresIn: config.jwt.refresh_expires_in,
   });
 

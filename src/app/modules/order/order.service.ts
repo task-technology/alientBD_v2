@@ -13,6 +13,24 @@ const insertIntoDB = async (data: IOrderCreatedEvent): Promise<Order> => {
   const id = await generateOrderId();
   try {
     const result = await prisma.$transaction(async transaction => {
+      //check product  availability
+      for (const { productId, quantity } of data.products) {
+        const warehouseProduct = await transaction.warehouseProduct.findUnique({
+          where: {
+            warehouseId_productId: {
+              warehouseId: data.warehouseId,
+              productId: productId,
+            },
+          },
+        });
+
+        if (!warehouseProduct || warehouseProduct.quantity < quantity) {
+          throw new ApiError(
+            httpStatus.BAD_REQUEST,
+            `Insufficient quantity for product ${productId} in warehouse ${data.warehouseId}`,
+          );
+        }
+      }
       // Create the order
       const order = await transaction.order.create({
         data: {
@@ -75,14 +93,18 @@ const getAllFromDB = async (
   const { limit, page, skip } = paginationHelpers.calculatePagination(options);
   const { searchTerm, ...filterData } = filters;
 
-  const andConditions = [];
+  const andConditions: Prisma.OrderWhereInput[] = [];
 
   if (searchTerm) {
     andConditions.push({
       OR: [
-        { invoiceId: { contains: searchTerm } },
-        { customer: { name: { contains: searchTerm } } },
-        { customer: { contactNo: { contains: searchTerm } } },
+        { invoiceId: { contains: searchTerm, mode: 'insensitive' } },
+        { customer: { name: { contains: searchTerm, mode: 'insensitive' } } },
+        {
+          customer: {
+            contactNo: { contains: searchTerm, mode: 'insensitive' },
+          },
+        },
       ],
     });
   }

@@ -29,6 +29,18 @@ const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
     data: result.data,
   });
 });
+const getAvailableFromDB = catchAsync(async (req: Request, res: Response) => {
+  const filters = pick(req.query, productFilterableFields);
+  const options = pick(req.query, paginationFields);
+  const result = await ProductService.getAvailableQtyFromDB(filters, options);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'products fetched successfully',
+    meta: result.meta,
+    data: result.data,
+  });
+});
 
 const getByIdFromDB = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
@@ -70,5 +82,5 @@ export const ProductController = {
   getByIdFromDB,
   updateOneInDB,
   deleteByIdFromDB,
-  // deleteFromDB
+  getAvailableFromDB,
 };

@@ -1,12 +1,8 @@
 export const productFilterableFields: string[] = [
   'searchTerm',
-  'name',
-  'brand',
-  'unit',
-  'availableQty',
-  'totalPurchased',
-  'remainderQty',
-  'sell',
+  'warehouseId',
+  'productId',
+  'quantity',
 ];
 
 export const productSearchableFields: string[] = [
