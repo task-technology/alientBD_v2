@@ -12,6 +12,7 @@ router.post(
 );
 
 router.get('/', warehouseProductController.getAllFromDB);
+router.get('/data', warehouseProductController.getwarehouseProductcountromDB);
 
 router.get('/:id', warehouseProductController.getByIdFromDB);
 

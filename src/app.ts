@@ -1,7 +1,7 @@
 import cors from 'cors';
 import express, { Application, NextFunction, Request, Response } from 'express';
 import httpStatus from 'http-status';
-import morgan from 'morgan';
+// import morgan from 'morgan';
 import globalErrorHandler from './app/middlewares/globalErrorHandler';
 import routes from './app/routes';
 
@@ -15,10 +15,13 @@ app.use(cookieParser());
 //parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
 
 app.use('/api/v1', routes);
 
-app.use(morgan('dev'));
+// app.use(morgan('dev'));
 
 //global error handler
 app.use(globalErrorHandler);

@@ -4,13 +4,16 @@
   "description": "This guide will walk you through the process of setting up the University Management Core Service Starter project. By following these steps, you will clone the project, install dependencies, and configure Prisma for database management. Let's get started!",
   "main": "src/server.ts",
   "scripts": {
+    "start": "node dist/server.js",
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "build":"tsc",
     "lint:check": "eslint --ignore-path .eslintignore --ext .js,.ts .",
     "lint:fix": "eslint . --fix",
     "prettier:check": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
     "prettier:fix": "prettier --write .",
     "lint-prettier": "yarn lint:check && yarn prettier:check",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "prisma generate"
   },
   "author": "Task Technology",
   "license": "ISC",
@@ -54,10 +57,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/task-technology/alientBD_v2.git"
+    "url": ""
   },
   "bugs": {
-    "url": "https://github.com/task-technology/alientBD_v2/issues"
+    "url": ""
   },
-  "homepage": "https://github.com/task-technology/alientBD_v2#readme"
+  "homepage": ""
 }

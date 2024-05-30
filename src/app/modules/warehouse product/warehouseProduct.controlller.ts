@@ -41,11 +41,23 @@ const getByIdFromDB = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const getwarehouseProductcountromDB = catchAsync(
+  async (req: Request, res: Response) => {
+    const result =
+      await warehouseProductService.getBywarehouseProductCountFromDB();
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'product quantity fetched successfully',
+      data: result,
+    });
+  },
+);
 
 export const warehouseProductController = {
   insertIntoDB,
   getAllFromDB,
   getByIdFromDB,
-  // updateIntoDB,
+  getwarehouseProductcountromDB,
   // deleteFromDB
 };

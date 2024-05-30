@@ -8,37 +8,50 @@ import { WarehouseProductCreatedEvent } from './warehouseProduct.interface';
 
 const insertIntoDB = async (
   data: WarehouseProductCreatedEvent,
-): Promise<WarehouseProduct> => {
-  let warehouseProduct = await prisma.warehouseProduct.findFirst({
-    where: {
-      warehouseId: data.warehouseId,
-      productId: data.productId,
-    },
-  });
-  if (warehouseProduct) {
-    warehouseProduct = await prisma.warehouseProduct.update({
-      where: { id: warehouseProduct.id },
-      data: { quantity: warehouseProduct.quantity + data.quantity },
-    });
-  } else {
-    warehouseProduct = await prisma.warehouseProduct.create({
-      data,
-    });
-  }
+): Promise<WarehouseProduct[]> => {
+  const warehouseId = data.warehouseId;
+  const products = data.product;
 
-  await prisma.product.update({
-    where: { id: data.productId },
-    data: {
-      availableQty: {
-        increment: data.quantity,
-      },
-      totalPurchased: {
-        increment: data.quantity,
-      },
-    },
-  });
+  const warehouseProducts = await Promise.all(
+    products.map(async product => {
+      let warehouseProduct = await prisma.warehouseProduct.findFirst({
+        where: {
+          warehouseId: warehouseId,
+          productId: product.productId,
+        },
+      });
+      if (warehouseProduct) {
+        warehouseProduct = await prisma.warehouseProduct.update({
+          where: { id: warehouseProduct.id },
+          data: { quantity: warehouseProduct.quantity + product.quantity },
+        });
+      } else {
+        warehouseProduct = await prisma.warehouseProduct.create({
+          data: {
+            warehouseId: warehouseId,
+            productId: product.productId,
+            quantity: product.quantity,
+          },
+        });
+      }
 
-  return warehouseProduct;
+      await prisma.product.update({
+        where: { id: product.productId },
+        data: {
+          availableQty: {
+            increment: product.quantity,
+          },
+          totalPurchased: {
+            increment: product.quantity,
+          },
+        },
+      });
+
+      return warehouseProduct;
+    }),
+  );
+
+  return warehouseProducts;
 };
 
 const getAllFromDB = async (
@@ -130,9 +143,35 @@ const getByIdFromDB = async (id: number): Promise<WarehouseProduct | null> => {
   });
   return result;
 };
+const getBywarehouseProductCountFromDB = async () => {
+  const warehouses = await prisma.warehouse.findMany({
+    include: {
+      products: {
+        select: {
+          quantity: true,
+        },
+      },
+    },
+  });
+  const summary = warehouses.map(warehouse => {
+    const productCount = warehouse.products.length;
+    const totalQuantity = warehouse.products.reduce(
+      (sum, product) => sum + product.quantity,
+      0,
+    );
+
+    return {
+      warehouseId: warehouse.id,
+      warehouseName: warehouse.name,
+      productCount,
+      totalQuantity,
+    };
+  });
+};
 
 export const warehouseProductService = {
   insertIntoDB,
   getAllFromDB,
   getByIdFromDB,
+  getBywarehouseProductCountFromDB,
 };

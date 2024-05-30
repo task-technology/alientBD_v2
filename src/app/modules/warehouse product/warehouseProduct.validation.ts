@@ -5,12 +5,16 @@ const create = z.object({
     warehouseId: z.number({
       required_error: 'warehouseId is required',
     }),
-    productId: z.number({
-      required_error: 'productId is required',
-    }),
-    quantity: z.number({
-      required_error: 'quantity Cost is required',
-    }),
+    product: z.array(
+      z.object({
+        productId: z.number({
+          required_error: 'productId is required',
+        }),
+        quantity: z.number({
+          required_error: 'quantity Cost is required',
+        }),
+      }),
+    ),
   }),
 });
 
