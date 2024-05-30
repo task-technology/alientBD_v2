@@ -3,13 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.productRelationalFieldsMapper = exports.productRelationalFields = exports.productSearchableFields = exports.productFilterableFields = void 0;
 exports.productFilterableFields = [
     'searchTerm',
-    'name',
-    'brand',
-    'unit',
-    'availableQty',
-    'totalPurchased',
-    'remainderQty',
-    'sell',
+    'warehouseId',
+    'productId',
+    'quantity',
 ];
 exports.productSearchableFields = [
     'product.name',

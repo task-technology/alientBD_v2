@@ -52,6 +52,16 @@ const getByIdFromDB = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
         data: result,
     });
 }));
+const checkQtyFromDB = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { warehouseId, productId, quantity } = req.body;
+    const result = yield warehouseProduct_service_1.warehouseProductService.CheckQtyFromDB(warehouseId, productId, quantity);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'product quantity fetched successfully',
+        data: result,
+    });
+}));
 const getwarehouseProductcountromDB = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield warehouseProduct_service_1.warehouseProductService.getBywarehouseProductCountFromDB();
     (0, sendResponse_1.default)(res, {

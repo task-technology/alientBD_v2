@@ -27,54 +27,61 @@ exports.warehouseProductService = void 0;
 const paginationHelper_1 = require("../../../helpers/paginationHelper");
 const prisma_1 = __importDefault(require("../../../shared/prisma"));
 const insertIntoDB = (data) => __awaiter(void 0, void 0, void 0, function* () {
-    const warehouseId = data.warehouseId;
-    const products = data.product;
-    const warehouseProducts = yield Promise.all(products.map((product) => __awaiter(void 0, void 0, void 0, function* () {
-        let warehouseProduct = yield prisma_1.default.warehouseProduct.findFirst({
-            where: {
-                warehouseId: warehouseId,
-                productId: product.productId,
-            },
-        });
-        if (warehouseProduct) {
-            warehouseProduct = yield prisma_1.default.warehouseProduct.update({
-                where: { id: warehouseProduct.id },
-                data: { quantity: warehouseProduct.quantity + product.quantity },
+    const warehouseProducts = yield prisma_1.default.$transaction((prisma) => __awaiter(void 0, void 0, void 0, function* () {
+        const results = [];
+        for (const item of data) {
+            let warehouseProduct = yield prisma.warehouseProduct.findFirst({
+                where: {
+                    warehouseId: item.warehouseId,
+                    productId: item.productId,
+                },
             });
-        }
-        else {
-            warehouseProduct = yield prisma_1.default.warehouseProduct.create({
+            if (warehouseProduct) {
+                warehouseProduct = yield prisma.warehouseProduct.update({
+                    where: { id: warehouseProduct.id },
+                    data: { quantity: warehouseProduct.quantity + item.quantity },
+                });
+            }
+            else {
+                warehouseProduct = yield prisma.warehouseProduct.create({
+                    data: {
+                        warehouseId: item.warehouseId,
+                        productId: item.productId,
+                        quantity: item.quantity,
+                    },
+                });
+            }
+            yield prisma.product.update({
+                where: { id: item.productId },
                 data: {
-                    warehouseId: warehouseId,
-                    productId: product.productId,
-                    quantity: product.quantity,
+                    availableQty: {
+                        increment: item.quantity,
+                    },
+                    totalPurchased: {
+                        increment: item.quantity,
+                    },
                 },
             });
+            results.push(warehouseProduct);
         }
-        yield prisma_1.default.product.update({
-            where: { id: product.productId },
-            data: {
-                availableQty: {
-                    increment: product.quantity,
-                },
-                totalPurchased: {
-                    increment: product.quantity,
-                },
-            },
-        });
-        return warehouseProduct;
-    })));
+        return results;
+    }));
     return warehouseProducts;
 });
 const getAllFromDB = (filters, options) => __awaiter(void 0, void 0, void 0, function* () {
     const { limit, page, skip } = paginationHelper_1.paginationHelpers.calculatePagination(options);
     const { searchTerm } = filters, filterData = __rest(filters, ["searchTerm"]);
     const andConditions = [];
+    andConditions.push({
+        quantity: {
+            gt: 0,
+        },
+    });
     if (searchTerm) {
         andConditions.push({
             OR: [
-                { product: { name: { contains: searchTerm } } },
-                { product: { brand: { contains: searchTerm } } },
+                { product: { name: { contains: searchTerm, mode: 'insensitive' } } },
+                { product: { brand: { contains: searchTerm, mode: 'insensitive' } } },
             ],
         });
     }
@@ -142,6 +149,18 @@ const getByIdFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
     });
     return result;
 });
+const CheckQtyFromDB = (warehouseId, productId, quantity) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma_1.default.warehouseProduct.findFirst({
+        where: {
+            warehouseId,
+            productId,
+            quantity: {
+                gte: quantity,
+            },
+        },
+    });
+    return result;
+});
 const getBywarehouseProductCountFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
     const warehouses = yield prisma_1.default.warehouse.findMany({
         include: {
@@ -168,4 +187,5 @@ exports.warehouseProductService = {
     getAllFromDB,
     getByIdFromDB,
     getBywarehouseProductCountFromDB,
+    CheckQtyFromDB,
 };

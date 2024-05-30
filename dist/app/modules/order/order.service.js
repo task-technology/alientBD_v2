@@ -33,6 +33,20 @@ const insertIntoDB = (data) => __awaiter(void 0, void 0, void 0, function* () {
     const id = yield (0, order_utilis_1.generateOrderId)();
     try {
         const result = yield prisma_1.default.$transaction((transaction) => __awaiter(void 0, void 0, void 0, function* () {
+            //check product  availability
+            for (const { productId, quantity } of data.products) {
+                const warehouseProduct = yield transaction.warehouseProduct.findUnique({
+                    where: {
+                        warehouseId_productId: {
+                            warehouseId: data.warehouseId,
+                            productId: productId,
+                        },
+                    },
+                });
+                if (!warehouseProduct || warehouseProduct.quantity < quantity) {
+                    throw new ApiError_1.default(http_status_1.default.BAD_REQUEST, `Insufficient quantity for product ${productId} in warehouse ${data.warehouseId}`);
+                }
+            }
             // Create the order
             const order = yield transaction.order.create({
                 data: {
@@ -91,9 +105,13 @@ const getAllFromDB = (filters, options) => __awaiter(void 0, void 0, void 0, fun
     if (searchTerm) {
         andConditions.push({
             OR: [
-                { invoiceId: { contains: searchTerm } },
-                { customer: { name: { contains: searchTerm } } },
-                { customer: { contactNo: { contains: searchTerm } } },
+                { invoiceId: { contains: searchTerm, mode: 'insensitive' } },
+                { customer: { name: { contains: searchTerm, mode: 'insensitive' } } },
+                {
+                    customer: {
+                        contactNo: { contains: searchTerm, mode: 'insensitive' },
+                    },
+                },
             ],
         });
     }

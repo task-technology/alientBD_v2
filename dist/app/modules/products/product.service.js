@@ -47,7 +47,57 @@ const getAllFromDB = (filters, options) => __awaiter(void 0, void 0, void 0, fun
         andConditions.push({
             OR: product_constant_1.productSearchableFields.map(field => ({
                 [field]: {
-                    contains: searchTerm.toLowerCase(),
+                    contains: searchTerm,
+                    mode: 'insensitive',
+                },
+            })),
+        });
+    }
+    if (Object.keys(filterData).length > 0) {
+        andConditions.push({
+            AND: Object.entries(filterData).map(([field, value]) => ({
+                [field]: value,
+            })),
+        });
+    }
+    const whereConditions = andConditions.length > 0 ? { AND: andConditions } : {};
+    const result = yield prisma_1.default.product.findMany({
+        where: whereConditions,
+        skip,
+        take: limit,
+        orderBy: options.sortBy && options.sortOrder
+            ? { [options.sortBy]: options.sortOrder }
+            : {
+                createdAt: 'desc',
+            },
+    });
+    const total = yield prisma_1.default.product.count({
+        where: whereConditions,
+    });
+    return {
+        meta: {
+            total,
+            page,
+            limit,
+        },
+        data: result,
+    };
+});
+const getAvailableQtyFromDB = (filters, options) => __awaiter(void 0, void 0, void 0, function* () {
+    const { limit, page, skip } = paginationHelper_1.paginationHelpers.calculatePagination(options);
+    const { searchTerm } = filters, filterData = __rest(filters, ["searchTerm"]);
+    const andConditions = [];
+    andConditions.push({
+        availableQty: {
+            gt: 0,
+        },
+    });
+    if (searchTerm) {
+        andConditions.push({
+            OR: product_constant_1.productSearchableFields.map(field => ({
+                [field]: {
+                    contains: searchTerm,
+                    mode: 'insensitive',
                 },
             })),
         });
@@ -116,4 +166,5 @@ exports.ProductService = {
     getByIdFromDB,
     updateOneInDB,
     deleteByIdFromDB,
+    getAvailableQtyFromDB,
 };

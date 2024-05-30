@@ -32,15 +32,15 @@ function loginUser(payload) {
         if (user.password && !(yield (0, auth_utils_1.isPasswordMatched)(password, user.password))) {
             throw new ApiError_1.default(http_status_1.default.UNAUTHORIZED, 'Password is incorrect');
         }
-        const { email, role, powers } = user;
+        const { id, email, role, powers } = user;
         const secret = config_1.default.jwt.secret;
         if (!secret) {
             throw new ApiError_1.default(http_status_1.default.UNAUTHORIZED, 'secret is not defined');
         }
-        const accessToken = jsonwebtoken_1.default.sign({ email, role, powers }, secret, {
+        const accessToken = jsonwebtoken_1.default.sign({ id, email, role, powers }, secret, {
             expiresIn: config_1.default.jwt.expires_in,
         });
-        const refreshToken = jsonwebtoken_1.default.sign({ email, role, powers }, secret, {
+        const refreshToken = jsonwebtoken_1.default.sign({ id, email, role, powers }, secret, {
             expiresIn: config_1.default.jwt.refresh_expires_in,
         });
         return {
