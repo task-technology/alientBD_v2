@@ -17,7 +17,7 @@ app.use((0, cookie_parser_1.default)());
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 app.get('/', (req, res) => {
-    res.send('Hello World!');
+    res.send('NEC Group');
 });
 app.use('/api/v1', routes_1.default);
 // app.use(morgan('dev'));
