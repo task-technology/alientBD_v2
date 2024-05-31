@@ -6,7 +6,7 @@ export type IWarehouseProductFilterRequest = {
 };
 
 export type WarehouseProductCreatedEvent = {
-  warehouseId: number;
-  productId: number;
-  quantity: number;
+  warehouseId: string;
+  productId: string;
+  quantity: string;
 };

@@ -75,5 +75,5 @@ export const warehouseProductController = {
   getAllFromDB,
   getByIdFromDB,
   getwarehouseProductcountromDB,
-  // deleteFromDB
+  checkQtyFromDB,
 };

@@ -28,6 +28,15 @@ router.get(
   ProductController.getAllFromDB,
 );
 router.get(
+  '/inventory',
+  // auth(
+  //   ENUM_USER_ROLE.SUPER_ADMIN,
+  //   ENUM_USER_ROLE.ADMIN,
+  //   ENUM_USER_ROLE.EMPLOYEE,
+  // ),
+  ProductController.getInventoryReportFromDB,
+);
+router.get(
   '/available',
   auth(
     ENUM_USER_ROLE.SUPER_ADMIN,
@@ -38,11 +47,11 @@ router.get(
 );
 router.get(
   '/:id',
-  auth(
-    ENUM_USER_ROLE.SUPER_ADMIN,
-    ENUM_USER_ROLE.ADMIN,
-    ENUM_USER_ROLE.EMPLOYEE,
-  ),
+  // auth(
+  //   ENUM_USER_ROLE.SUPER_ADMIN,
+  //   ENUM_USER_ROLE.ADMIN,
+  //   ENUM_USER_ROLE.EMPLOYEE,
+  // ),
   ProductController.getByIdFromDB,
 );
 

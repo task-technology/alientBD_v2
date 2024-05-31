@@ -1,7 +1,7 @@
 import cors from 'cors';
 import express, { Application, NextFunction, Request, Response } from 'express';
 import httpStatus from 'http-status';
-// import morgan from 'morgan';
+import morgan from 'morgan';
 import globalErrorHandler from './app/middlewares/globalErrorHandler';
 import routes from './app/routes';
 
@@ -21,7 +21,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/v1', routes);
 
-// app.use(morgan('dev'));
+app.use(morgan('dev'));
 
 //global error handler
 app.use(globalErrorHandler);

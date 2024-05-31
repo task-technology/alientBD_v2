@@ -41,6 +41,23 @@ const getAvailableFromDB = catchAsync(async (req: Request, res: Response) => {
     data: result.data,
   });
 });
+const getInventoryReportFromDB = catchAsync(
+  async (req: Request, res: Response) => {
+    const filters = pick(req.query, productFilterableFields);
+    const options = pick(req.query, paginationFields);
+    const result = await ProductService.getInventoryReportFromDB(
+      filters,
+      options,
+    );
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'inventory report fetched successfully',
+      meta: result.meta,
+      data: result.data,
+    });
+  },
+);
 
 const getByIdFromDB = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
@@ -60,7 +77,7 @@ const updateOneInDB = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'warehouse updated successfully',
+    message: 'product updated successfully',
     data: result,
   });
 });
@@ -71,7 +88,7 @@ const deleteByIdFromDB = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'warehouse delete successfully',
+    message: 'product delete successfully',
     data: result,
   });
 });
@@ -83,4 +100,5 @@ export const ProductController = {
   updateOneInDB,
   deleteByIdFromDB,
   getAvailableFromDB,
+  getInventoryReportFromDB,
 };

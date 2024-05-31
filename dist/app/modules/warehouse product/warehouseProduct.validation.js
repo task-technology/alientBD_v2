@@ -9,8 +9,8 @@ const productSchema = zod_1.z.object({
     productId: zod_1.z.number({
         required_error: 'productId is required',
     }),
-    quality: zod_1.z.number({
-        required_error: 'quality is required',
+    quantity: zod_1.z.number({
+        required_error: 'quantity is required',
     }),
 });
 const create = zod_1.z.object({
@@ -24,8 +24,8 @@ const check = zod_1.z.object({
         productId: zod_1.z.number({
             required_error: 'productId is required',
         }),
-        quality: zod_1.z.number({
-            required_error: 'quality is required',
+        quantity: zod_1.z.number({
+            required_error: 'quantity is required',
         }),
     }),
 });

@@ -1,14 +1,14 @@
 import { z } from 'zod';
 
 const productSchema = z.object({
-  warehouseId: z.number({
+  warehouseId: z.string({
     required_error: 'warehouseId is required',
   }),
-  productId: z.number({
+  productId: z.string({
     required_error: 'productId is required',
   }),
-  quality: z.number({
-    required_error: 'quality is required',
+  quantity: z.string({
+    required_error: 'quantity is required',
   }),
 });
 
@@ -17,14 +17,14 @@ const create = z.object({
 });
 const check = z.object({
   body: z.object({
-    warehouseId: z.number({
+    warehouseId: z.string({
       required_error: 'warehouseId is required',
     }),
-    productId: z.number({
+    productId: z.string({
       required_error: 'productId is required',
     }),
-    quality: z.number({
-      required_error: 'quality is required',
+    quantity: z.number({
+      required_error: 'quantity is required',
     }),
   }),
 });

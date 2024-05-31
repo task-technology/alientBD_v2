@@ -15,34 +15,36 @@ const insertIntoDB = async (
     for (const item of data) {
       let warehouseProduct = await prisma.warehouseProduct.findFirst({
         where: {
-          warehouseId: item.warehouseId,
-          productId: item.productId,
+          warehouseId: parseInt(item.warehouseId),
+          productId: parseInt(item.productId),
         },
       });
 
       if (warehouseProduct) {
         warehouseProduct = await prisma.warehouseProduct.update({
           where: { id: warehouseProduct.id },
-          data: { quantity: warehouseProduct.quantity + item.quantity },
+          data: {
+            quantity: warehouseProduct.quantity + parseInt(item.quantity),
+          },
         });
       } else {
         warehouseProduct = await prisma.warehouseProduct.create({
           data: {
-            warehouseId: item.warehouseId,
-            productId: item.productId,
-            quantity: item.quantity,
+            warehouseId: parseInt(item.warehouseId),
+            productId: parseInt(item.productId),
+            quantity: parseInt(item.quantity),
           },
         });
       }
 
       await prisma.product.update({
-        where: { id: item.productId },
+        where: { id: parseInt(item.productId) },
         data: {
           availableQty: {
-            increment: item.quantity,
+            increment: parseInt(item.quantity),
           },
           totalPurchased: {
-            increment: item.quantity,
+            increment: parseInt(item.quantity),
           },
         },
       });
@@ -153,14 +155,14 @@ const getByIdFromDB = async (id: number): Promise<WarehouseProduct | null> => {
 };
 
 const CheckQtyFromDB = async (
-  warehouseId: number,
-  productId: number,
+  warehouseId: string,
+  productId: string,
   quantity: number,
 ): Promise<WarehouseProduct | null> => {
   const result = await prisma.warehouseProduct.findFirst({
     where: {
-      warehouseId,
-      productId,
+      warehouseId: parseInt(warehouseId),
+      productId: parseInt(productId),
       quantity: {
         gte: quantity,
       },
