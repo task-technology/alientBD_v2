@@ -28,12 +28,40 @@ router.get(
   ProductController.getAllFromDB,
 );
 router.get(
-  '/inventory',
+  '/remainder-count',
   // auth(
   //   ENUM_USER_ROLE.SUPER_ADMIN,
   //   ENUM_USER_ROLE.ADMIN,
   //   ENUM_USER_ROLE.EMPLOYEE,
   // ),
+  ProductController.getRemainderCountFromDB,
+);
+router.get(
+  '/remainder',
+  auth(
+    ENUM_USER_ROLE.SUPER_ADMIN,
+    ENUM_USER_ROLE.ADMIN,
+    ENUM_USER_ROLE.EMPLOYEE,
+  ),
+  ProductController.getRemainderFromDB,
+);
+router.get(
+  '/empty',
+  auth(
+    ENUM_USER_ROLE.SUPER_ADMIN,
+    ENUM_USER_ROLE.ADMIN,
+    ENUM_USER_ROLE.EMPLOYEE,
+  ),
+  ProductController.getEmptyFromDB,
+);
+
+router.get(
+  '/inventory',
+  auth(
+    ENUM_USER_ROLE.SUPER_ADMIN,
+    ENUM_USER_ROLE.ADMIN,
+    ENUM_USER_ROLE.EMPLOYEE,
+  ),
   ProductController.getInventoryReportFromDB,
 );
 router.get(
@@ -47,11 +75,11 @@ router.get(
 );
 router.get(
   '/:id',
-  // auth(
-  //   ENUM_USER_ROLE.SUPER_ADMIN,
-  //   ENUM_USER_ROLE.ADMIN,
-  //   ENUM_USER_ROLE.EMPLOYEE,
-  // ),
+  auth(
+    ENUM_USER_ROLE.SUPER_ADMIN,
+    ENUM_USER_ROLE.ADMIN,
+    ENUM_USER_ROLE.EMPLOYEE,
+  ),
   ProductController.getByIdFromDB,
 );
 
@@ -68,11 +96,7 @@ router.patch(
 
 router.delete(
   '/:id',
-  auth(
-    ENUM_USER_ROLE.SUPER_ADMIN,
-    ENUM_USER_ROLE.ADMIN,
-    ENUM_USER_ROLE.EMPLOYEE,
-  ),
+  auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
   ProductController.deleteByIdFromDB,
 );
 

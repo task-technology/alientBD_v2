@@ -42,6 +42,4 @@ router.patch(
   warehouseController.updateOneInDB,
 );
 
-router.delete('/:id', warehouseController.deleteByIdFromDB);
-
 export const warehouseRoutes = router;

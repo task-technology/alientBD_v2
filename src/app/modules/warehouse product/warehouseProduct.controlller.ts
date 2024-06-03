@@ -18,8 +18,12 @@ const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
-  const filters = pick(req.query, productFilterableFields);
+  const filters: any = pick(req.query, productFilterableFields);
+  if (filters.warehouseId) {
+    filters.warehouseId = parseInt(filters.warehouseId as string, 10);
+  }
   const options = pick(req.query, paginationFields);
+  console.log(filters, options);
   const result = await warehouseProductService.getAllFromDB(filters, options);
   sendResponse(res, {
     statusCode: httpStatus.OK,

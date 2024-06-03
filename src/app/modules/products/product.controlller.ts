@@ -29,6 +29,41 @@ const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
     data: result.data,
   });
 });
+const getEmptyFromDB = catchAsync(async (req: Request, res: Response) => {
+  const filters = pick(req.query, productFilterableFields);
+  const options = pick(req.query, paginationFields);
+  const result = await ProductService.getEmptyFromDB(filters, options);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Empty products fetched successfully',
+    meta: result.meta,
+    data: result.data,
+  });
+});
+const getRemainderFromDB = catchAsync(async (req: Request, res: Response) => {
+  const filters = pick(req.query, productFilterableFields);
+  const options = pick(req.query, paginationFields);
+  const result = await ProductService.getRemainderFromDB(filters, options);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'low quantity products fetched successfully',
+    meta: result.meta,
+    data: result.data,
+  });
+});
+const getRemainderCountFromDB = catchAsync(
+  async (req: Request, res: Response) => {
+    const result = await ProductService.getRemainderCountFromDB();
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'low quantity products count successfully',
+      data: result,
+    });
+  },
+);
 const getAvailableFromDB = catchAsync(async (req: Request, res: Response) => {
   const filters = pick(req.query, productFilterableFields);
   const options = pick(req.query, paginationFields);
@@ -101,4 +136,7 @@ export const ProductController = {
   deleteByIdFromDB,
   getAvailableFromDB,
   getInventoryReportFromDB,
+  getRemainderFromDB,
+  getRemainderCountFromDB,
+  getEmptyFromDB,
 };

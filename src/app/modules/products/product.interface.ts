@@ -15,3 +15,15 @@ export type ProductCreatedEvent = {
   unit: 'pics' | 'kg';
   remainderQty: number;
 };
+
+export type ProductWithWarehouseInfo = {
+  name: string;
+  brand: string;
+  availableQty: number;
+  warehouses: {
+    quantity: number;
+    warehouse: {
+      name: string;
+    };
+  }[];
+};

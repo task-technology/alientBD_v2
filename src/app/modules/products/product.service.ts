@@ -1,11 +1,12 @@
 import { Prisma, Product } from '@prisma/client';
+import ApiError from '../../../errors/ApiError';
 import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import prisma from '../../../shared/prisma';
-import { IEmployeeFilterRequest } from '../Employee/employee.interface';
 import { productSearchableFields } from './product.constant';
 import {
+  IProductFilterRequest,
   ProductCreatedEvent,
   ProductWithWarehouseInfo,
 } from './product.interface';
@@ -24,7 +25,7 @@ const insertIntoDB = async (data: ProductCreatedEvent): Promise<Product> => {
 };
 
 const getAllFromDB = async (
-  filters: IEmployeeFilterRequest,
+  filters: IProductFilterRequest,
   options: IPaginationOptions,
 ): Promise<IGenericResponse<Product[]>> => {
   const { limit, page, skip } = paginationHelpers.calculatePagination(options);
@@ -79,9 +80,156 @@ const getAllFromDB = async (
     data: result,
   };
 };
+const getEmptyFromDB = async (
+  filters: IProductFilterRequest,
+  options: IPaginationOptions,
+) => {
+  const { limit, page, skip } = paginationHelpers.calculatePagination(options);
+  const { searchTerm, ...filterData } = filters;
+
+  const andConditions = [];
+
+  andConditions.push({
+    availableQty: 0,
+  });
+  if (searchTerm) {
+    andConditions.push({
+      OR: productSearchableFields.map(field => ({
+        [field]: {
+          contains: searchTerm,
+          mode: 'insensitive',
+        },
+      })),
+    });
+  }
+
+  if (Object.keys(filterData).length > 0) {
+    andConditions.push({
+      AND: Object.entries(filterData).map(([field, value]) => ({
+        [field]: value,
+      })),
+    });
+  }
+
+  const whereConditions: Prisma.ProductWhereInput =
+    andConditions.length > 0 ? { AND: andConditions } : {};
+
+  const result = await prisma.product.findMany({
+    where: whereConditions,
+    skip,
+    select: {
+      id: true,
+      name: true,
+      brand: true,
+      remainderQty: true,
+      availableQty: true,
+    },
+    take: limit,
+    orderBy:
+      options.sortBy && options.sortOrder
+        ? { [options.sortBy]: options.sortOrder }
+        : {
+            createdAt: 'desc',
+          },
+  });
+
+  const total = await prisma.product.count({
+    where: whereConditions,
+  });
+
+  return {
+    meta: {
+      total,
+      page,
+      limit,
+    },
+    data: result,
+  };
+};
+
+const getRemainderFromDB = async (
+  filters: IProductFilterRequest,
+  options: IPaginationOptions,
+) => {
+  const { limit, page, skip } = paginationHelpers.calculatePagination(options);
+  const { searchTerm, ...filterData } = filters;
+
+  const andConditions = [];
+
+  if (searchTerm) {
+    andConditions.push({
+      OR: productSearchableFields.map(field => ({
+        [field]: {
+          contains: searchTerm,
+          mode: 'insensitive',
+        },
+      })),
+    });
+  }
+
+  if (Object.keys(filterData).length > 0) {
+    andConditions.push({
+      AND: Object.entries(filterData).map(([field, value]) => ({
+        [field]: value,
+      })),
+    });
+  }
+
+  andConditions.push({
+    availableQty: {
+      lt: prisma.product.fields.remainderQty,
+    },
+  });
+
+  const whereConditions: Prisma.ProductWhereInput =
+    andConditions.length > 0 ? { AND: andConditions } : {};
+
+  const result = await prisma.product.findMany({
+    where: whereConditions,
+    skip,
+    select: {
+      id: true,
+      name: true,
+      brand: true,
+      remainderQty: true,
+      availableQty: true,
+    },
+    take: limit,
+    orderBy:
+      options.sortBy && options.sortOrder
+        ? { [options.sortBy]: options.sortOrder }
+        : {
+            createdAt: 'desc',
+          },
+  });
+
+  const total = await prisma.product.count({
+    where: whereConditions,
+  });
+
+  return {
+    meta: {
+      total,
+      page,
+      limit,
+    },
+    data: result,
+  };
+};
+const getRemainderCountFromDB = async () => {
+  const total = await prisma.product.count({
+    where: {
+      availableQty: {
+        lt: prisma.product.fields.remainderQty,
+      },
+    },
+  });
+
+  return total;
+};
 
 const getAvailableQtyFromDB = async (
-  filters: IEmployeeFilterRequest,
+  filters: IProductFilterRequest,
   options: IPaginationOptions,
 ): Promise<IGenericResponse<Product[]>> => {
   const { limit, page, skip } = paginationHelpers.calculatePagination(options);
@@ -143,7 +291,7 @@ const getAvailableQtyFromDB = async (
 };
 
 const getInventoryReportFromDB = async (
-  filters: IEmployeeFilterRequest,
+  filters: IProductFilterRequest,
   options: IPaginationOptions,
 ): Promise<IGenericResponse<ProductWithWarehouseInfo[]>> => {
   const { limit, page, skip } = paginationHelpers.calculatePagination(options);
@@ -246,13 +394,37 @@ const updateOneInDB = async (
   return result;
 };
 
-const deleteByIdFromDB = async (id: string): Promise<Product> => {
-  const result = await prisma.product.delete({
-    where: {
-      id: parseInt(id),
-    },
-  });
-  return result;
+const deleteByIdFromDB = async (id: string): Promise<Product | null> => {
+  const productId = parseInt(id);
+
+  try {
+    const result = await prisma.$transaction(async prisma => {
+      await prisma.orderProduct.deleteMany({
+        where: {
+          productId: productId,
+        },
+      });
+
+      await prisma.warehouseProduct.deleteMany({
+        where: {
+          productId: productId,
+        },
+      });
+
+      const deletedProduct = await prisma.product.delete({
+        where: {
+          id: productId,
+        },
+      });
+
+      return deletedProduct;
+    });
+
+    return result;
+  } catch (error) {
+    throw new ApiError(500, (error as Error).message);
+    return null;
+  }
 };
 
 export const ProductService = {
@@ -263,4 +435,7 @@ export const ProductService = {
   deleteByIdFromDB,
   getAvailableQtyFromDB,
   getInventoryReportFromDB,
+  getRemainderFromDB,
+  getRemainderCountFromDB,
+  getEmptyFromDB,
 };

@@ -3,8 +3,10 @@ import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import prisma from '../../../shared/prisma';
-import { IEmployeeFilterRequest } from '../Employee/employee.interface';
-import { WarehouseProductCreatedEvent } from './warehouseProduct.interface';
+import {
+  IWarehouseProductFilterRequest,
+  WarehouseProductCreatedEvent,
+} from './warehouseProduct.interface';
 
 const insertIntoDB = async (
   data: WarehouseProductCreatedEvent[],
@@ -59,7 +61,7 @@ const insertIntoDB = async (
 };
 
 const getAllFromDB = async (
-  filters: IEmployeeFilterRequest,
+  filters: IWarehouseProductFilterRequest,
   options: IPaginationOptions,
 ): Promise<IGenericResponse<WarehouseProduct[]>> => {
   const { limit, page, skip } = paginationHelpers.calculatePagination(options);
@@ -93,6 +95,7 @@ const getAllFromDB = async (
   const whereConditions: Prisma.WarehouseProductWhereInput =
     andConditions.length > 0 ? { AND: andConditions } : {};
 
+  console.log('search', searchTerm);
   const result = await prisma.warehouseProduct.findMany({
     where: whereConditions,
     include: {
@@ -196,6 +199,7 @@ const getBywarehouseProductCountFromDB = async () => {
       totalQuantity,
     };
   });
+  return summary;
 };
 
 export const warehouseProductService = {
