@@ -5,6 +5,7 @@ import { customerRoutes } from '../modules/customer/customer.routes';
 import { orderRoutes } from '../modules/order/order.routes';
 import { productRoutes } from '../modules/products/product.routes';
 import { UserRoutes } from '../modules/user/user.routes';
+import { warehouseLogsRoutes } from '../modules/warehouse logs/warehouseLogs.routes';
 import { warehouseProductRoutes } from '../modules/warehouse product/warehouseProduct.routes';
 import { warehouseRoutes } from '../modules/warehouse/warehouse.routes';
 
@@ -42,6 +43,10 @@ const moduleRoutes = [
   {
     path: '/warehouse-products',
     routes: warehouseProductRoutes,
+  },
+  {
+    path: '/warehouse-logs',
+    routes: warehouseLogsRoutes,
   },
 ];
 

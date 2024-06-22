@@ -1,0 +1,71 @@
+Thu Jun 20 2024 14:43:30 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ You are not authorized
+Thu Jun 20 2024 14:45:34 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ 
+Invalid `prisma.product.create()` invocation:
+
+{
+  data: {
+    brand: undefined,
+    purchaseCost: undefined,
+    unit: undefined,
+    remainderQty: undefined,
++   name: String
+  }
+}
+
+Argument `name` is missing.
+Thu Jun 20 2024 14:46:17 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ 
+Invalid `prisma.product.create()` invocation:
+
+{
+  data: {
+    brand: undefined,
+    purchaseCost: undefined,
+    unit: undefined,
+    remainderQty: undefined,
++   name: String
+  }
+}
+
+Argument `name` is missing.
+Thu Jun 20 2024 14:48:17 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ 
+Invalid `prisma.product.create()` invocation:
+
+{
+  data: {
+    brand: undefined,
+    purchaseCost: undefined,
+    unit: undefined,
+    remainderQty: undefined,
++   name: String
+  }
+}
+
+Argument `name` is missing.
+Thu Jun 20 2024 14:49:35 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ 
+Invalid `prisma.product.create()` invocation:
+
+{
+  data: {
+    brand: undefined,
+    purchaseCost: undefined,
+    unit: undefined,
+    remainderQty: undefined,
++   name: String
+  }
+}
+
+Argument `name` is missing.
+Thu Jun 20 2024 14:49:47 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ 
+Invalid `prisma.product.create()` invocation:
+
+{
+  data: {
+    brand: undefined,
+    purchaseCost: undefined,
+    unit: undefined,
+    remainderQty: undefined,
++   name: String
+  }
+}
+
+Argument `name` is missing.

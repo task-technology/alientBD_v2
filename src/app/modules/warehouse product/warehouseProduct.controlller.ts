@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 import { paginationFields } from '../../../constants/pagination';
@@ -8,7 +9,18 @@ import { productFilterableFields } from './warehouseProduct.constant';
 import { warehouseProductService } from './warehouseProduct.service';
 
 const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
-  const result = await warehouseProductService.insertIntoDB(req.body);
+  const user= req.user;
+  const result = await warehouseProductService.insertIntoDB(req.body,user as any);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'product quantity updated successfully',
+    data: result,
+  });
+});
+const FileInsertIntoDB = catchAsync(async (req: Request, res: Response) => {
+  const user= req.user;
+  const result = await warehouseProductService.MultiInsertIntoDB(req.body,user as any);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -18,12 +30,12 @@ const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
+   
   const filters: any = pick(req.query, productFilterableFields);
   if (filters.warehouseId) {
     filters.warehouseId = parseInt(filters.warehouseId as string, 10);
   }
   const options = pick(req.query, paginationFields);
-  console.log(filters, options);
   const result = await warehouseProductService.getAllFromDB(filters, options);
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -80,4 +92,5 @@ export const warehouseProductController = {
   getByIdFromDB,
   getwarehouseProductcountromDB,
   checkQtyFromDB,
+  FileInsertIntoDB
 };

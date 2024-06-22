@@ -15,6 +15,24 @@ const productSchema = z.object({
 const create = z.object({
   body: z.array(productSchema),
 });
+const productFileUploadSchema = z.object({
+  warehouseId: z.number({
+    required_error: 'warehouseId is required',
+  }),
+  name: z.string({
+    required_error: 'product name is required',
+  }),
+  brand: z.string({
+    required_error: 'product brand is required',
+  }),
+  quantity: z.number({
+    required_error: 'quantity is required',
+  }),
+});
+
+const create_multiple = z.object({
+  body: z.array(productFileUploadSchema),
+});
 const check = z.object({
   body: z.object({
     warehouseId: z.string({
@@ -32,4 +50,5 @@ const check = z.object({
 export const warehouseProductValidation = {
   create,
   check,
+  create_multiple
 };

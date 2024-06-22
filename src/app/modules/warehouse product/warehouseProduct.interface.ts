@@ -9,3 +9,9 @@ export type WarehouseProductCreatedEvent = {
   productId: string;
   quantity: string;
 };
+export type WarehouseProductCreatedEventMulti = {
+  warehouseId: string;
+  name: string;
+  brand: string;
+  quantity: string;
+};

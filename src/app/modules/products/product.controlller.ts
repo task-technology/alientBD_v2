@@ -16,6 +16,15 @@ const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const FileInsertIntoDB = catchAsync(async (req: Request, res: Response) => {
+  const result = await ProductService.insertManyIntoDB(req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'product created successfully',
+    data: result,
+  });
+});
 
 const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
   const filters = pick(req.query, productFilterableFields);
@@ -130,6 +139,7 @@ const deleteByIdFromDB = catchAsync(async (req: Request, res: Response) => {
 
 export const ProductController = {
   insertIntoDB,
+  FileInsertIntoDB,
   getAllFromDB,
   getByIdFromDB,
   updateOneInDB,

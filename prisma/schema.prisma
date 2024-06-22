@@ -20,20 +20,22 @@ model User {
 }
 
 model UserDetails {
-  id            Int      @id @default(autoincrement())
-  userId        Int      @unique
-  user          User     @relation(fields: [userId], references: [id])
-  email         String   @unique
+  id            Int                   @id @default(autoincrement())
+  userId        Int                   @unique
+  user          User                  @relation(fields: [userId], references: [id])
   name          String
+  email         String
   designation   String
   role          String
   contactNo     String
   profileImage  String
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  createdOrders Order[]  @relation("CreatedOrders")
-  powers        Power[]  @relation("UserDetailsPowers")
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
+  createdOrders Order[]               @relation("CreatedOrders")
+  powers        Power[]               @relation("UserDetailsPowers")
+  warehouseLogs WarehouseProductLog[]
 
+  @@unique([contactNo])
   @@map("userDetails")
 }
 
@@ -46,36 +48,40 @@ model Customer {
   orders       Order[]  @relation("CustomerOrders")
   incharges    Order[]  @relation("InchargeOrders")
   createdAt    DateTime @default(now())
-  updatedAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
+  @@unique([contactNo, email])
   @@map("customers")
 }
 
 model Product {
-  id             Int                @id @default(autoincrement())
-  name           String             @unique
+  id             Int                   @id @default(autoincrement())
+  name           String
   brand          String
   purchaseCost   Float
   unit           String
-  availableQty   Int                @default(0)
-  totalPurchased Int                @default(0)
-  remainderQty   Int                @default(0)
-  sell           Int                @default(0)
+  availableQty   Int                   @default(0)
+  totalPurchased Int                   @default(0)
+  remainderQty   Int                   @default(0)
+  sell           Int                   @default(0)
   warehouses     WarehouseProduct[]
   orderProducts  OrderProduct[]
-  createdAt      DateTime           @default(now())
-  updatedAt      DateTime           @updatedAt
+  logs           WarehouseProductLog[]
+  createdAt      DateTime              @default(now())
+  updatedAt      DateTime              @updatedAt
 
+  @@unique([name, brand])
   @@map("products")
 }
 
 model Warehouse {
-  id        Int                @id @default(autoincrement())
-  name      String             @unique
+  id        Int                   @id @default(autoincrement())
+  name      String                @unique
   products  WarehouseProduct[]
+  logs      WarehouseProductLog[]
   orders    Order[]
-  createdAt DateTime           @default(now())
-  updatedAt DateTime           @default(now())
+  createdAt DateTime              @default(now())
+  updatedAt DateTime              @updatedAt
 
   @@map("warehouses")
 }
@@ -94,6 +100,21 @@ model WarehouseProduct {
   @@map("warehouseProducts")
 }
 
+model WarehouseProductLog {
+  id          Int         @id @default(autoincrement())
+  warehouse   Warehouse   @relation(fields: [warehouseId], references: [id])
+  warehouseId Int
+  product     Product     @relation(fields: [productId], references: [id])
+  productId   Int
+  quantity    Float
+  user        UserDetails @relation(fields: [userId], references: [id])
+  userId      Int
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@map("warehouseProductLogs")
+}
+
 model Order {
   id          Int            @id @default(autoincrement())
   invoiceId   String
@@ -107,7 +128,7 @@ model Order {
   incharge    Customer       @relation("InchargeOrders", fields: [inchargeId], references: [id])
   createdBy   UserDetails    @relation("CreatedOrders", fields: [createdById], references: [id])
   createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
 
   @@map("orders")
 }
@@ -120,14 +141,15 @@ model OrderProduct {
   productId Int
   quantity  Float
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("orderProducts")
 }
 
 model Power {
-  id          Int           @id @default(autoincrement())
-  name        String        @unique
-  users       UserDetails[] @relation("UserDetailsPowers")
+  id    Int           @id @default(autoincrement())
+  name  String        @unique
+  users UserDetails[] @relation("UserDetailsPowers")
+
   @@map("powers")
 }

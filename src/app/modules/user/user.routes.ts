@@ -31,6 +31,7 @@ router.post(
     ENUM_USER_ROLE.ADMIN,
     ENUM_USER_ROLE.EMPLOYEE,
   ),
+  validateRequest(UserValidation.create),
   UserController.createAdmin,
 );
 

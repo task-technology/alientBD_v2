@@ -17,6 +17,16 @@ router.post(
   validateRequest(ProductValidation.create),
   ProductController.insertIntoDB,
 );
+router.post(
+  '/create-multiple',
+  auth(
+    ENUM_USER_ROLE.SUPER_ADMIN,
+    ENUM_USER_ROLE.ADMIN,
+    ENUM_USER_ROLE.EMPLOYEE,
+  ),
+  validateRequest(ProductValidation.fileUpload),
+  ProductController.FileInsertIntoDB,
+);
 
 router.get(
   '/',

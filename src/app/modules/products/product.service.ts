@@ -23,6 +23,13 @@ const insertIntoDB = async (data: ProductCreatedEvent): Promise<Product> => {
   });
   return result;
 };
+const insertManyIntoDB = async (data: ProductCreatedEvent[]): Promise<number> => {
+  console.log("data",data)
+  const result = await prisma.product.createMany({
+    data
+  });
+  return result.count;
+};
 
 const getAllFromDB = async (
   filters: IProductFilterRequest,
@@ -438,4 +445,5 @@ export const ProductService = {
   getRemainderFromDB,
   getRemainderCountFromDB,
   getEmptyFromDB,
+  insertManyIntoDB
 };
