@@ -1,0 +1,167 @@
+Thu Jun 20 2024 23:6:36 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ [
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "body",
+      0,
+      "name"
+    ],
+    "message": "product name is required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "body",
+      0,
+      "brand"
+    ],
+    "message": "product brand is required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "body",
+      1,
+      "name"
+    ],
+    "message": "product name is required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "body",
+      1,
+      "brand"
+    ],
+    "message": "product brand is required"
+  }
+]
+Thu Jun 20 2024 23:8:18 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ [
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "body",
+      0,
+      "name"
+    ],
+    "message": "product name is required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "body",
+      0,
+      "brand"
+    ],
+    "message": "product brand is required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "body",
+      1,
+      "name"
+    ],
+    "message": "product name is required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "body",
+      1,
+      "brand"
+    ],
+    "message": "product brand is required"
+  }
+]
+Thu Jun 20 2024 23:51:4 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ [
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "body",
+      0,
+      "name"
+    ],
+    "message": "product name is required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "body",
+      0,
+      "brand"
+    ],
+    "message": "product brand is required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "body",
+      1,
+      "name"
+    ],
+    "message": "product name is required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "body",
+      1,
+      "brand"
+    ],
+    "message": "product brand is required"
+  }
+]
+Thu Jun 20 2024 23:51:55 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ 
+Invalid `prisma.warehouseProductLog.create()` invocation:
+
+
+Foreign key constraint failed on the field: `warehouseProductLogs_userId_fkey (index)`
+Thu Jun 20 2024 23:54:51 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ 
+Invalid `prisma.warehouseProductLog.create()` invocation:
+
+{
+  data: {
+    warehouseId: 1,
+    productId: 1,
+    quantityAdded: 10,
+    userId: 1,
++   quantity: Float
+  }
+}
+
+Argument `quantity` is missing.
+Thu Jun 20 2024 23:55:49 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ 
+Invalid `prisma.warehouseProductLog.create()` invocation:
+
+
+Foreign key constraint failed on the field: `warehouseProductLogs_userId_fkey (index)`
+Thu Jun 20 2024 23:56:3 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ 
+Invalid `prisma.warehouseProductLog.create()` invocation:
+
+
+Foreign key constraint failed on the field: `warehouseProductLogs_userId_fkey (index)`

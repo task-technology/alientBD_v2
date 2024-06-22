@@ -1,6 +1,3 @@
--- CreateEnum
-CREATE TYPE "Unit" AS ENUM ('pcs', 'kg', 'liter');
-
 -- CreateTable
 CREATE TABLE "users" (
     "id" SERIAL NOT NULL,
@@ -17,7 +14,6 @@ CREATE TABLE "users" (
 CREATE TABLE "userDetails" (
     "id" SERIAL NOT NULL,
     "userId" INTEGER NOT NULL,
-    "email" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "designation" TEXT NOT NULL,
     "role" TEXT NOT NULL,
@@ -37,7 +33,7 @@ CREATE TABLE "customers" (
     "contactNo" TEXT NOT NULL,
     "profileImage" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "customers_pkey" PRIMARY KEY ("id")
 );
@@ -48,7 +44,7 @@ CREATE TABLE "products" (
     "name" TEXT NOT NULL,
     "brand" TEXT NOT NULL,
     "purchaseCost" DOUBLE PRECISION NOT NULL,
-    "unit" "Unit" NOT NULL,
+    "unit" TEXT NOT NULL,
     "availableQty" INTEGER NOT NULL DEFAULT 0,
     "totalPurchased" INTEGER NOT NULL DEFAULT 0,
     "remainderQty" INTEGER NOT NULL DEFAULT 0,
@@ -64,7 +60,7 @@ CREATE TABLE "warehouses" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "warehouses_pkey" PRIMARY KEY ("id")
 );
@@ -82,6 +78,19 @@ CREATE TABLE "warehouseProducts" (
 );
 
 -- CreateTable
+CREATE TABLE "warehouseProductLogs" (
+    "id" SERIAL NOT NULL,
+    "warehouseId" INTEGER NOT NULL,
+    "productId" INTEGER NOT NULL,
+    "quantity" DOUBLE PRECISION NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "warehouseProductLogs_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "orders" (
     "id" SERIAL NOT NULL,
     "invoiceId" TEXT NOT NULL,
@@ -90,7 +99,7 @@ CREATE TABLE "orders" (
     "inchargeId" INTEGER NOT NULL,
     "createdById" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "orders_pkey" PRIMARY KEY ("id")
 );
@@ -102,7 +111,7 @@ CREATE TABLE "orderProducts" (
     "productId" INTEGER NOT NULL,
     "quantity" DOUBLE PRECISION NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "orderProducts_pkey" PRIMARY KEY ("id")
 );
@@ -111,8 +120,6 @@ CREATE TABLE "orderProducts" (
 CREATE TABLE "powers" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "powers_pkey" PRIMARY KEY ("id")
 );
@@ -130,13 +137,16 @@ CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 CREATE UNIQUE INDEX "userDetails_userId_key" ON "userDetails"("userId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "userDetails_email_key" ON "userDetails"("email");
+CREATE UNIQUE INDEX "userDetails_contactNo_key" ON "userDetails"("contactNo");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "customers_email_key" ON "customers"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "products_name_key" ON "products"("name");
+CREATE UNIQUE INDEX "customers_contactNo_email_key" ON "customers"("contactNo", "email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "products_name_brand_key" ON "products"("name", "brand");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "warehouses_name_key" ON "warehouses"("name");
@@ -161,6 +171,15 @@ ALTER TABLE "warehouseProducts" ADD CONSTRAINT "warehouseProducts_warehouseId_fk
 
 -- AddForeignKey
 ALTER TABLE "warehouseProducts" ADD CONSTRAINT "warehouseProducts_productId_fkey" FOREIGN KEY ("productId") REFERENCES "products"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "warehouseProductLogs" ADD CONSTRAINT "warehouseProductLogs_warehouseId_fkey" FOREIGN KEY ("warehouseId") REFERENCES "warehouses"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "warehouseProductLogs" ADD CONSTRAINT "warehouseProductLogs_productId_fkey" FOREIGN KEY ("productId") REFERENCES "products"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "warehouseProductLogs" ADD CONSTRAINT "warehouseProductLogs_userId_fkey" FOREIGN KEY ("userId") REFERENCES "userDetails"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "orders" ADD CONSTRAINT "orders_warehouseId_fkey" FOREIGN KEY ("warehouseId") REFERENCES "warehouses"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

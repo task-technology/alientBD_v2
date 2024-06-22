@@ -1,0 +1,10 @@
+Wed Jun 19 2024 1:14:17 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ invalid signature
+Wed Jun 19 2024 1:14:17 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ invalid signature
+Wed Jun 19 2024 1:14:26 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ invalid signature
+Wed Jun 19 2024 1:14:26 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ invalid signature
+Wed Jun 19 2024 1:14:36 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ User does not exist
+Wed Jun 19 2024 1:15:12 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ 
+Invalid `prisma.product.create()` invocation:
+
+
+Unique constraint failed on the fields: (`name`)

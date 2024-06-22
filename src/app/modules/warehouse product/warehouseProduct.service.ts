@@ -1,4 +1,4 @@
-import { Prisma, WarehouseProduct } from '@prisma/client';
+import { Prisma, User, WarehouseProduct } from '@prisma/client';
 import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/pagination';
@@ -6,10 +6,12 @@ import prisma from '../../../shared/prisma';
 import {
   IWarehouseProductFilterRequest,
   WarehouseProductCreatedEvent,
+  WarehouseProductCreatedEventMulti,
 } from './warehouseProduct.interface';
 
 const insertIntoDB = async (
   data: WarehouseProductCreatedEvent[],
+  user:User
 ): Promise<WarehouseProduct[]> => {
   const warehouseProducts = await prisma.$transaction(async prisma => {
     const results = [];
@@ -51,6 +53,14 @@ const insertIntoDB = async (
         },
       });
 
+      await prisma.warehouseProductLog.create({
+        data: {
+          warehouseId:parseInt(item.warehouseId),
+          productId:parseInt(item.productId),
+          quantity: parseInt(item.quantity),
+          userId: user.id,
+        },
+      });
       results.push(warehouseProduct);
     }
 
@@ -58,6 +68,83 @@ const insertIntoDB = async (
   });
 
   return warehouseProducts;
+};
+
+const MultiInsertIntoDB = async (
+  data: WarehouseProductCreatedEventMulti[],
+  user:User
+): Promise<WarehouseProduct[]> => {
+
+  const results = [];
+
+  for (const item of data) {
+    // Fetch the productId using name and brand
+    const product = await prisma.product.findFirst({
+      where: {
+        name: item.name,
+        brand: item.brand,
+      },
+    });
+
+    if (!product) {
+      throw new Error(`Product with name ${item.name} and brand ${item.brand} not found`);
+    }
+
+    const productId = product.id;
+
+    // Check if the warehouse product exists
+    let warehouseProduct = await prisma.warehouseProduct.findFirst({
+      where: {
+        warehouseId: parseInt(item.warehouseId),
+        productId: productId,
+      },
+    });
+
+    if (warehouseProduct) {
+      // Update the existing warehouse product
+      warehouseProduct = await prisma.warehouseProduct.update({
+        where: { id: warehouseProduct.id },
+        data: {
+          quantity: warehouseProduct.quantity + parseInt(item.quantity),
+        },
+      });
+    } else {
+      // Create a new warehouse product
+      warehouseProduct = await prisma.warehouseProduct.create({
+        data: {
+          warehouseId: parseInt(item.warehouseId),
+          productId: productId,
+          quantity: parseInt(item.quantity),
+        },
+      });
+    }
+
+    // Update the product quantities
+    await prisma.product.update({
+      where: { id: productId },
+      data: {
+        availableQty: {
+          increment: parseInt(item.quantity),
+        },
+        totalPurchased: {
+          increment: parseInt(item.quantity),
+        },
+      },
+    });
+
+    await prisma.warehouseProductLog.create({
+      data: {
+        warehouseId:parseInt(item.warehouseId),
+        productId,
+        quantity: parseInt(item.quantity),
+        userId: user.id,
+      },
+    });
+
+    results.push(warehouseProduct);
+  }
+
+  return results;
 };
 
 const getAllFromDB = async (
@@ -95,7 +182,6 @@ const getAllFromDB = async (
   const whereConditions: Prisma.WarehouseProductWhereInput =
     andConditions.length > 0 ? { AND: andConditions } : {};
 
-  console.log('search', searchTerm);
   const result = await prisma.warehouseProduct.findMany({
     where: whereConditions,
     include: {
@@ -208,4 +294,5 @@ export const warehouseProductService = {
   getByIdFromDB,
   getBywarehouseProductCountFromDB,
   CheckQtyFromDB,
+  MultiInsertIntoDB,
 };
