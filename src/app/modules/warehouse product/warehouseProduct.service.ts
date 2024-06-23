@@ -1,4 +1,5 @@
 import { Prisma, User, WarehouseProduct } from '@prisma/client';
+import ApiError from '../../../errors/ApiError';
 import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/pagination';
@@ -11,7 +12,7 @@ import {
 
 const insertIntoDB = async (
   data: WarehouseProductCreatedEvent[],
-  user:User
+  user: User,
 ): Promise<WarehouseProduct[]> => {
   const warehouseProducts = await prisma.$transaction(async prisma => {
     const results = [];
@@ -55,8 +56,8 @@ const insertIntoDB = async (
 
       await prisma.warehouseProductLog.create({
         data: {
-          warehouseId:parseInt(item.warehouseId),
-          productId:parseInt(item.productId),
+          warehouseId: parseInt(item.warehouseId),
+          productId: parseInt(item.productId),
           quantity: parseInt(item.quantity),
           userId: user.id,
         },
@@ -72,9 +73,8 @@ const insertIntoDB = async (
 
 const MultiInsertIntoDB = async (
   data: WarehouseProductCreatedEventMulti[],
-  user:User
+  user: User,
 ): Promise<WarehouseProduct[]> => {
-
   const results = [];
 
   for (const item of data) {
@@ -87,7 +87,9 @@ const MultiInsertIntoDB = async (
     });
 
     if (!product) {
-      throw new Error(`Product with name ${item.name} and brand ${item.brand} not found`);
+      throw new Error(
+        `Product with name ${item.name} and brand ${item.brand} not found`,
+      );
     }
 
     const productId = product.id;
@@ -134,7 +136,7 @@ const MultiInsertIntoDB = async (
 
     await prisma.warehouseProductLog.create({
       data: {
-        warehouseId:parseInt(item.warehouseId),
+        warehouseId: parseInt(item.warehouseId),
         productId,
         quantity: parseInt(item.quantity),
         userId: user.id,
@@ -288,6 +290,73 @@ const getBywarehouseProductCountFromDB = async () => {
   return summary;
 };
 
+const updateIntoDB = async (
+  payload: {
+    warehouseId: number;
+    productId: number;
+    quantity: number;
+  },
+  user:User
+): Promise<WarehouseProduct> => {
+  const warehouseProduct = await prisma.warehouseProduct.findUnique({
+    where: {
+      warehouseId_productId: {
+        warehouseId: payload.warehouseId,
+        productId: payload.productId,
+      },
+    },
+  });
+
+  if (!warehouseProduct) {
+    throw new ApiError(400, 'not found product');
+  }
+
+  const updatedWarehouseProduct = await prisma.$transaction(async prisma => {
+    const updatedWarehouseProduct = await prisma.warehouseProduct.update({
+      where: { id: warehouseProduct.id },
+      data: { quantity: payload.quantity },
+    });
+    await prisma.product.update({
+      where: { id: payload.productId },
+      data: {
+        availableQty: {
+          decrement: warehouseProduct.quantity,
+        },
+        totalPurchased: {
+          decrement: warehouseProduct.quantity,
+        },
+      },
+    });
+
+    // Step 2: Add the new quantity
+    await prisma.product.update({
+      where: { id: payload.productId },
+      data: {
+        availableQty: {
+          increment: payload.quantity,
+        },
+        totalPurchased: {
+          increment: payload.quantity,
+        },
+      },
+    });
+
+      // Log the quantity update
+      await prisma.warehouseProductLog.create({
+        data: {
+          warehouseId: payload.warehouseId,
+          productId: payload.productId,
+          quantity: - payload.quantity,
+          userId:user.id, 
+        },
+      });
+
+    return updatedWarehouseProduct;
+  });
+
+  return updatedWarehouseProduct;
+};
+
 export const warehouseProductService = {
   insertIntoDB,
   getAllFromDB,
@@ -295,4 +364,5 @@ export const warehouseProductService = {
   getBywarehouseProductCountFromDB,
   CheckQtyFromDB,
   MultiInsertIntoDB,
+  updateIntoDB,
 };

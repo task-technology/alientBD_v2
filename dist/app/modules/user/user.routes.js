@@ -13,5 +13,5 @@ const user_validation_1 = require("./user.validation");
 const router = express_1.default.Router();
 router.post('/create-employee', (0, auth_1.default)(user_1.ENUM_USER_ROLE.SUPER_ADMIN, user_1.ENUM_USER_ROLE.ADMIN, user_1.ENUM_USER_ROLE.EMPLOYEE), (0, validateRequest_1.default)(user_validation_1.UserValidation.create), user_controller_1.UserController.createEmployee);
 router.post('/create-power', (0, auth_1.default)(user_1.ENUM_USER_ROLE.SUPER_ADMIN, user_1.ENUM_USER_ROLE.ADMIN), (0, validateRequest_1.default)(user_validation_1.UserValidation.createpower), user_controller_1.UserController.createPower);
-router.post('/create-admin', (0, auth_1.default)(user_1.ENUM_USER_ROLE.SUPER_ADMIN, user_1.ENUM_USER_ROLE.ADMIN, user_1.ENUM_USER_ROLE.EMPLOYEE), user_controller_1.UserController.createAdmin);
+router.post('/create-admin', (0, auth_1.default)(user_1.ENUM_USER_ROLE.SUPER_ADMIN, user_1.ENUM_USER_ROLE.ADMIN, user_1.ENUM_USER_ROLE.EMPLOYEE), (0, validateRequest_1.default)(user_validation_1.UserValidation.create), user_controller_1.UserController.createAdmin);
 exports.UserRoutes = router;

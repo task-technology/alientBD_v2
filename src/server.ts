@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+ 
 import { Server } from 'http';
 
 import app from './app';
@@ -16,7 +16,9 @@ async function bootstrap() {
     console.log(`Server running on port ${config.port}`);
     logger.info(`Server running on port ${config.port}`);
   });
-
+  // server = app.listen(5000, '0.0.0.0', () => {
+  //   console.log(`Application listening on port ${config.port}`);
+  // });
   const exitHandler = () => {
     if (server) {
       server.close(() => {

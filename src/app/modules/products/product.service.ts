@@ -24,7 +24,6 @@ const insertIntoDB = async (data: ProductCreatedEvent): Promise<Product> => {
   return result;
 };
 const insertManyIntoDB = async (data: ProductCreatedEvent[]): Promise<number> => {
-  console.log("data",data)
   const result = await prisma.product.createMany({
     data
   });
@@ -184,7 +183,7 @@ const getRemainderFromDB = async (
 
   andConditions.push({
     availableQty: {
-      lt: prisma.product.fields.remainderQty,
+      lte: prisma.product.fields.remainderQty,
     },
   });
 
@@ -227,7 +226,7 @@ const getRemainderCountFromDB = async () => {
   const total = await prisma.product.count({
     where: {
       availableQty: {
-        lt: prisma.product.fields.remainderQty,
+        lte: prisma.product.fields.remainderQty,
       },
     },
   });
@@ -413,6 +412,11 @@ const deleteByIdFromDB = async (id: string): Promise<Product | null> => {
       });
 
       await prisma.warehouseProduct.deleteMany({
+        where: {
+          productId: productId,
+        },
+      });
+      await prisma.warehouseProductLog.deleteMany({
         where: {
           productId: productId,
         },

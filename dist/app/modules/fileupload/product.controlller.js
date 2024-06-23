@@ -25,7 +25,7 @@ const insertIntoDB = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, v
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
-        message: 'Student created successfully',
+        message: 'product created successfully',
         data: result,
     });
 }));
@@ -36,7 +36,7 @@ const getAllFromDB = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, v
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
-        message: 'Students fetched successfully',
+        message: 'products fetched successfully',
         meta: result.meta,
         data: result.data,
     });
@@ -48,7 +48,7 @@ const getByIdFromDB = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
-        message: 'Student fetched successfully',
+        message: 'product fetched successfully',
         data: result,
     });
 }));

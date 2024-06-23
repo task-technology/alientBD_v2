@@ -10,6 +10,7 @@ const customer_routes_1 = require("../modules/customer/customer.routes");
 const order_routes_1 = require("../modules/order/order.routes");
 const product_routes_1 = require("../modules/products/product.routes");
 const user_routes_1 = require("../modules/user/user.routes");
+const warehouseLogs_routes_1 = require("../modules/warehouse logs/warehouseLogs.routes");
 const warehouseProduct_routes_1 = require("../modules/warehouse product/warehouseProduct.routes");
 const warehouse_routes_1 = require("../modules/warehouse/warehouse.routes");
 const router = express_1.default.Router();
@@ -45,6 +46,10 @@ const moduleRoutes = [
     {
         path: '/warehouse-products',
         routes: warehouseProduct_routes_1.warehouseProductRoutes,
+    },
+    {
+        path: '/warehouse-logs',
+        routes: warehouseLogs_routes_1.warehouseLogsRoutes,
     },
 ];
 moduleRoutes.forEach(route => router.use(route.path, route.routes));

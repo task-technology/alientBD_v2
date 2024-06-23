@@ -12,7 +12,7 @@ const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Student created successfully',
+    message: 'Customer created successfully',
     data: result,
   });
 });
@@ -24,7 +24,7 @@ const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Students fetched successfully',
+    message: 'Customers fetched successfully',
     meta: result.meta,
     data: result.data,
   });
@@ -37,7 +37,7 @@ const getByIdFromDB = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Student fetched successfully',
+    message: 'Customer fetched successfully',
     data: result,
   });
 });

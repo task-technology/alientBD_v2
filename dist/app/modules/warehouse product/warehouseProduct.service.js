@@ -24,42 +24,53 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.warehouseProductService = void 0;
+const ApiError_1 = __importDefault(require("../../../errors/ApiError"));
 const paginationHelper_1 = require("../../../helpers/paginationHelper");
 const prisma_1 = __importDefault(require("../../../shared/prisma"));
-const insertIntoDB = (data) => __awaiter(void 0, void 0, void 0, function* () {
+const insertIntoDB = (data, user) => __awaiter(void 0, void 0, void 0, function* () {
     const warehouseProducts = yield prisma_1.default.$transaction((prisma) => __awaiter(void 0, void 0, void 0, function* () {
         const results = [];
         for (const item of data) {
             let warehouseProduct = yield prisma.warehouseProduct.findFirst({
                 where: {
-                    warehouseId: item.warehouseId,
-                    productId: item.productId,
+                    warehouseId: parseInt(item.warehouseId),
+                    productId: parseInt(item.productId),
                 },
             });
             if (warehouseProduct) {
                 warehouseProduct = yield prisma.warehouseProduct.update({
                     where: { id: warehouseProduct.id },
-                    data: { quantity: warehouseProduct.quantity + item.quantity },
+                    data: {
+                        quantity: warehouseProduct.quantity + parseInt(item.quantity),
+                    },
                 });
             }
             else {
                 warehouseProduct = yield prisma.warehouseProduct.create({
                     data: {
-                        warehouseId: item.warehouseId,
-                        productId: item.productId,
-                        quantity: item.quantity,
+                        warehouseId: parseInt(item.warehouseId),
+                        productId: parseInt(item.productId),
+                        quantity: parseInt(item.quantity),
                     },
                 });
             }
             yield prisma.product.update({
-                where: { id: item.productId },
+                where: { id: parseInt(item.productId) },
                 data: {
                     availableQty: {
-                        increment: item.quantity,
+                        increment: parseInt(item.quantity),
                     },
                     totalPurchased: {
-                        increment: item.quantity,
+                        increment: parseInt(item.quantity),
                     },
+                },
+            });
+            yield prisma.warehouseProductLog.create({
+                data: {
+                    warehouseId: parseInt(item.warehouseId),
+                    productId: parseInt(item.productId),
+                    quantity: parseInt(item.quantity),
+                    userId: user.id,
                 },
             });
             results.push(warehouseProduct);
@@ -67,6 +78,70 @@ const insertIntoDB = (data) => __awaiter(void 0, void 0, void 0, function* () {
         return results;
     }));
     return warehouseProducts;
+});
+const MultiInsertIntoDB = (data, user) => __awaiter(void 0, void 0, void 0, function* () {
+    const results = [];
+    for (const item of data) {
+        // Fetch the productId using name and brand
+        const product = yield prisma_1.default.product.findFirst({
+            where: {
+                name: item.name,
+                brand: item.brand,
+            },
+        });
+        if (!product) {
+            throw new Error(`Product with name ${item.name} and brand ${item.brand} not found`);
+        }
+        const productId = product.id;
+        // Check if the warehouse product exists
+        let warehouseProduct = yield prisma_1.default.warehouseProduct.findFirst({
+            where: {
+                warehouseId: parseInt(item.warehouseId),
+                productId: productId,
+            },
+        });
+        if (warehouseProduct) {
+            // Update the existing warehouse product
+            warehouseProduct = yield prisma_1.default.warehouseProduct.update({
+                where: { id: warehouseProduct.id },
+                data: {
+                    quantity: warehouseProduct.quantity + parseInt(item.quantity),
+                },
+            });
+        }
+        else {
+            // Create a new warehouse product
+            warehouseProduct = yield prisma_1.default.warehouseProduct.create({
+                data: {
+                    warehouseId: parseInt(item.warehouseId),
+                    productId: productId,
+                    quantity: parseInt(item.quantity),
+                },
+            });
+        }
+        // Update the product quantities
+        yield prisma_1.default.product.update({
+            where: { id: productId },
+            data: {
+                availableQty: {
+                    increment: parseInt(item.quantity),
+                },
+                totalPurchased: {
+                    increment: parseInt(item.quantity),
+                },
+            },
+        });
+        yield prisma_1.default.warehouseProductLog.create({
+            data: {
+                warehouseId: parseInt(item.warehouseId),
+                productId,
+                quantity: parseInt(item.quantity),
+                userId: user.id,
+            },
+        });
+        results.push(warehouseProduct);
+    }
+    return results;
 });
 const getAllFromDB = (filters, options) => __awaiter(void 0, void 0, void 0, function* () {
     const { limit, page, skip } = paginationHelper_1.paginationHelpers.calculatePagination(options);
@@ -152,8 +227,8 @@ const getByIdFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
 const CheckQtyFromDB = (warehouseId, productId, quantity) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield prisma_1.default.warehouseProduct.findFirst({
         where: {
-            warehouseId,
-            productId,
+            warehouseId: parseInt(warehouseId),
+            productId: parseInt(productId),
             quantity: {
                 gte: quantity,
             },
@@ -181,6 +256,60 @@ const getBywarehouseProductCountFromDB = () => __awaiter(void 0, void 0, void 0,
             totalQuantity,
         };
     });
+    return summary;
+});
+const updateIntoDB = (payload, user) => __awaiter(void 0, void 0, void 0, function* () {
+    const warehouseProduct = yield prisma_1.default.warehouseProduct.findUnique({
+        where: {
+            warehouseId_productId: {
+                warehouseId: payload.warehouseId,
+                productId: payload.productId,
+            },
+        },
+    });
+    if (!warehouseProduct) {
+        throw new ApiError_1.default(400, 'not found product');
+    }
+    const updatedWarehouseProduct = yield prisma_1.default.$transaction((prisma) => __awaiter(void 0, void 0, void 0, function* () {
+        const updatedWarehouseProduct = yield prisma.warehouseProduct.update({
+            where: { id: warehouseProduct.id },
+            data: { quantity: payload.quantity },
+        });
+        yield prisma.product.update({
+            where: { id: payload.productId },
+            data: {
+                availableQty: {
+                    decrement: warehouseProduct.quantity,
+                },
+                totalPurchased: {
+                    decrement: warehouseProduct.quantity,
+                },
+            },
+        });
+        // Step 2: Add the new quantity
+        yield prisma.product.update({
+            where: { id: payload.productId },
+            data: {
+                availableQty: {
+                    increment: payload.quantity,
+                },
+                totalPurchased: {
+                    increment: payload.quantity,
+                },
+            },
+        });
+        // Log the quantity update
+        yield prisma.warehouseProductLog.create({
+            data: {
+                warehouseId: payload.warehouseId,
+                productId: payload.productId,
+                quantity: -payload.quantity,
+                userId: user.id,
+            },
+        });
+        return updatedWarehouseProduct;
+    }));
+    return updatedWarehouseProduct;
 });
 exports.warehouseProductService = {
     insertIntoDB,
@@ -188,4 +317,6 @@ exports.warehouseProductService = {
     getByIdFromDB,
     getBywarehouseProductCountFromDB,
     CheckQtyFromDB,
+    MultiInsertIntoDB,
+    updateIntoDB,
 };
