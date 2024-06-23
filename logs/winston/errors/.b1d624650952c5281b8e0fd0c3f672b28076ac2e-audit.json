@@ -6,69 +6,14 @@
     "auditLog": "D:\\NEC Group\\alientBD\\alientBD v3 Updating\\alientBD prisma backend\\logs\\winston\\errors\\.b1d624650952c5281b8e0fd0c3f672b28076ac2e-audit.json",
     "files": [
         {
-            "date": 1718103742040,
-            "name": "D:\\NEC Group\\alientBD\\alientBD v3 Updating\\alientBD prisma backend\\logs\\winston\\errors\\phu-2024-11-06-17-error.log",
-            "hash": "a415dfbfc3c62e23d236dbaeefa6659915be1f796e890cfab02de2f2a6b7eaef"
+            "date": 1719125710564,
+            "name": "D:\\NEC Group\\alientBD\\alientBD v3 Updating\\alientBD prisma backend\\logs\\winston\\errors\\phu-2024-23-06-12-error.log",
+            "hash": "96217bba0f23f6806ba1da42a3b4cfbe67f7f5f5d300d45e6155373c1c8e6a22"
         },
         {
-            "date": 1718738012413,
-            "name": "D:\\NEC Group\\alientBD\\alientBD v3 Updating\\alientBD prisma backend\\logs\\winston\\errors\\phu-2024-19-06-01-error.log",
-            "hash": "bf4b09666144fb9a4f1de52f9663e6de93efa401d1355eecadf369c30ec67b43"
-        },
-        {
-            "date": 1718784412090,
-            "name": "D:\\NEC Group\\alientBD\\alientBD v3 Updating\\alientBD prisma backend\\logs\\winston\\errors\\phu-2024-19-06-14-error.log",
-            "hash": "e90bd97ae5f6edc98988717f06eb1205f87f25742da589c7291e98ad83b69e9f"
-        },
-        {
-            "date": 1718790243576,
-            "name": "D:\\NEC Group\\alientBD\\alientBD v3 Updating\\alientBD prisma backend\\logs\\winston\\errors\\phu-2024-19-06-15-error.log",
-            "hash": "4ed43f1007bb321bebdff0ebd2710320217139bdbe9118fa6c7e7e376e93abda"
-        },
-        {
-            "date": 1718791695576,
-            "name": "D:\\NEC Group\\alientBD\\alientBD v3 Updating\\alientBD prisma backend\\logs\\winston\\errors\\phu-2024-19-06-16-error.log",
-            "hash": "93357602f389e2cba61b0304ce446444c4088b91ce6be735bc9b7c4bb10b804b"
-        },
-        {
-            "date": 1718871369165,
-            "name": "D:\\NEC Group\\alientBD\\alientBD v3 Updating\\alientBD prisma backend\\logs\\winston\\errors\\phu-2024-20-06-14-error.log",
-            "hash": "aebf7e573584bbd2657a0d3249a7776751d6b7393864cb72391a70ac3d9c5c4b"
-        },
-        {
-            "date": 1718874076334,
-            "name": "D:\\NEC Group\\alientBD\\alientBD v3 Updating\\alientBD prisma backend\\logs\\winston\\errors\\phu-2024-20-06-15-error.log",
-            "hash": "3f1b745228fe81579daeb08ff563d3e647789f57874afbe440a17d5e158ac799"
-        },
-        {
-            "date": 1718901865745,
-            "name": "D:\\NEC Group\\alientBD\\alientBD v3 Updating\\alientBD prisma backend\\logs\\winston\\errors\\phu-2024-20-06-22-error.log",
-            "hash": "fa9b20fb23719707439635368c7c03d74b60ce867c384f91ee0a137203c6da0a"
-        },
-        {
-            "date": 1718902919608,
-            "name": "D:\\NEC Group\\alientBD\\alientBD v3 Updating\\alientBD prisma backend\\logs\\winston\\errors\\phu-2024-20-06-23-error.log",
-            "hash": "501619a07c69f6c86437956d5696cba0920ba2dd4727b56af9daec306ea84fbb"
-        },
-        {
-            "date": 1718906428337,
-            "name": "D:\\NEC Group\\alientBD\\alientBD v3 Updating\\alientBD prisma backend\\logs\\winston\\errors\\phu-2024-21-06-00-error.log",
-            "hash": "4e419cc534ef1e8ca004b19afbc363ddd7fe510f1426995d793801038e34fbbe"
-        },
-        {
-            "date": 1719030287923,
-            "name": "D:\\NEC Group\\alientBD\\alientBD v3 Updating\\alientBD prisma backend\\logs\\winston\\errors\\phu-2024-22-06-10-error.log",
-            "hash": "96139f6d78e45af00cbd6ae49b62cff0b33e27f64e84cb4d0d95147f32dc5267"
-        },
-        {
-            "date": 1719032409720,
-            "name": "D:\\NEC Group\\alientBD\\alientBD v3 Updating\\alientBD prisma backend\\logs\\winston\\errors\\phu-2024-22-06-11-error.log",
-            "hash": "33fc10f73ef1f3fd20bc54b6b47a5365164348ae2c49bc0d77191a89009a916d"
-        },
-        {
-            "date": 1719036127358,
-            "name": "D:\\NEC Group\\alientBD\\alientBD v3 Updating\\alientBD prisma backend\\logs\\winston\\errors\\phu-2024-22-06-12-error.log",
-            "hash": "738a9f8da628854d1c9c76a74084bf9c5a75a46eba0d997fbcd7dcae6a0af4f8"
+            "date": 1719126379158,
+            "name": "D:\\NEC Group\\alientBD\\alientBD v3 Updating\\alientBD prisma backend\\logs\\winston\\errors\\phu-2024-23-06-13-error.log",
+            "hash": "9b753c17ef8775925ca502181ff9a7fce62d570ebe618238f084c828ff61b3fe"
         }
     ],
     "hashType": "sha256"

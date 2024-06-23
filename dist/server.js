@@ -22,9 +22,12 @@ process.on('uncaughtException', error => {
 let server;
 function bootstrap() {
     return __awaiter(this, void 0, void 0, function* () {
-        server = app_1.default.listen(config_1.default.port, () => {
-            console.log(`Server running on port ${config_1.default.port}`);
-            logger_1.logger.info(`Server running on port ${config_1.default.port}`);
+        // server = app.listen(config.port, () => {
+        //   console.log(`Server running on port ${config.port}`);
+        //   logger.info(`Server running on port ${config.port}`);
+        // });
+        server = app_1.default.listen(5000, '0.0.0.0', () => {
+            console.log(`Application listening on port ${config_1.default.port}`);
         });
         const exitHandler = () => {
             if (server) {

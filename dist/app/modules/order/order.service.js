@@ -176,6 +176,48 @@ const getByIdFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
         where: {
             id,
         },
+        include: {
+            warehouse: {
+                select: {
+                    name: true,
+                },
+            },
+            customer: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                    contactNo: true,
+                },
+            },
+            incharge: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                    contactNo: true,
+                },
+            },
+            createdBy: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                    contactNo: true,
+                },
+            },
+            products: {
+                include: {
+                    product: {
+                        select: {
+                            id: true,
+                            name: true,
+                            brand: true,
+                        },
+                    },
+                },
+            },
+        },
     });
     return result;
 });

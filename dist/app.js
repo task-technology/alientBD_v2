@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const cors_1 = __importDefault(require("cors"));
 const express_1 = __importDefault(require("express"));
 const http_status_1 = __importDefault(require("http-status"));
-// import morgan from 'morgan';
+const morgan_1 = __importDefault(require("morgan"));
 const globalErrorHandler_1 = __importDefault(require("./app/middlewares/globalErrorHandler"));
 const routes_1 = __importDefault(require("./app/routes"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
@@ -16,11 +16,11 @@ app.use((0, cookie_parser_1.default)());
 //parser
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
+app.use((0, morgan_1.default)('dev'));
 app.get('/', (req, res) => {
     res.send('NEC Group');
 });
 app.use('/api/v1', routes_1.default);
-// app.use(morgan('dev'));
 //global error handler
 app.use(globalErrorHandler_1.default);
 //handle not found

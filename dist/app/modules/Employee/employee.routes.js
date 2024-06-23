@@ -15,5 +15,5 @@ router.get('/', (0, auth_1.default)(user_1.ENUM_USER_ROLE.ADMIN, user_1.ENUM_USE
 router.get('/power', (0, auth_1.default)(user_1.ENUM_USER_ROLE.ADMIN, user_1.ENUM_USER_ROLE.SUPER_ADMIN, user_1.ENUM_USER_ROLE.EMPLOYEE), employee_controller_1.EmployeeController.getAllPowerFromDB);
 router.get('/:id', (0, auth_1.default)(user_1.ENUM_USER_ROLE.ADMIN, user_1.ENUM_USER_ROLE.SUPER_ADMIN, user_1.ENUM_USER_ROLE.EMPLOYEE), employee_controller_1.EmployeeController.getByIdFromDB);
 router.patch('/:id', (0, validateRequest_1.default)(employee_validation_1.EmployeeValidation.update), (0, auth_1.default)(user_1.ENUM_USER_ROLE.SUPER_ADMIN, user_1.ENUM_USER_ROLE.ADMIN, user_1.ENUM_USER_ROLE.EMPLOYEE), employee_controller_1.EmployeeController.updateIntoDB);
-router.delete('/:id', (0, auth_1.default)(user_1.ENUM_USER_ROLE.SUPER_ADMIN, user_1.ENUM_USER_ROLE.ADMIN, user_1.ENUM_USER_ROLE.EMPLOYEE), employee_controller_1.EmployeeController.deleteFromDB);
+router.delete('/:id', (0, auth_1.default)(user_1.ENUM_USER_ROLE.SUPER_ADMIN, user_1.ENUM_USER_ROLE.ADMIN), employee_controller_1.EmployeeController.deleteFromDB);
 exports.employeeRoutes = router;

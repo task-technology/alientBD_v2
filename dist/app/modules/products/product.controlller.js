@@ -29,6 +29,15 @@ const insertIntoDB = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, v
         data: result,
     });
 }));
+const FileInsertIntoDB = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield product_service_1.ProductService.insertManyIntoDB(req.body);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'product created successfully',
+        data: result,
+    });
+}));
 const getAllFromDB = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const filters = (0, pick_1.default)(req.query, product_constant_1.productFilterableFields);
     const options = (0, pick_1.default)(req.query, pagination_1.paginationFields);
@@ -41,6 +50,39 @@ const getAllFromDB = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, v
         data: result.data,
     });
 }));
+const getEmptyFromDB = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const filters = (0, pick_1.default)(req.query, product_constant_1.productFilterableFields);
+    const options = (0, pick_1.default)(req.query, pagination_1.paginationFields);
+    const result = yield product_service_1.ProductService.getEmptyFromDB(filters, options);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'Empty products fetched successfully',
+        meta: result.meta,
+        data: result.data,
+    });
+}));
+const getRemainderFromDB = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const filters = (0, pick_1.default)(req.query, product_constant_1.productFilterableFields);
+    const options = (0, pick_1.default)(req.query, pagination_1.paginationFields);
+    const result = yield product_service_1.ProductService.getRemainderFromDB(filters, options);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'low quantity products fetched successfully',
+        meta: result.meta,
+        data: result.data,
+    });
+}));
+const getRemainderCountFromDB = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield product_service_1.ProductService.getRemainderCountFromDB();
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'low quantity products count successfully',
+        data: result,
+    });
+}));
 const getAvailableFromDB = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const filters = (0, pick_1.default)(req.query, product_constant_1.productFilterableFields);
     const options = (0, pick_1.default)(req.query, pagination_1.paginationFields);
@@ -49,6 +91,18 @@ const getAvailableFromDB = (0, catchAsync_1.default)((req, res) => __awaiter(voi
         statusCode: http_status_1.default.OK,
         success: true,
         message: 'products fetched successfully',
+        meta: result.meta,
+        data: result.data,
+    });
+}));
+const getInventoryReportFromDB = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const filters = (0, pick_1.default)(req.query, product_constant_1.productFilterableFields);
+    const options = (0, pick_1.default)(req.query, pagination_1.paginationFields);
+    const result = yield product_service_1.ProductService.getInventoryReportFromDB(filters, options);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'inventory report fetched successfully',
         meta: result.meta,
         data: result.data,
     });
@@ -70,7 +124,7 @@ const updateOneInDB = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
-        message: 'warehouse updated successfully',
+        message: 'product updated successfully',
         data: result,
     });
 }));
@@ -80,15 +134,20 @@ const deleteByIdFromDB = (0, catchAsync_1.default)((req, res) => __awaiter(void 
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
-        message: 'warehouse delete successfully',
+        message: 'product delete successfully',
         data: result,
     });
 }));
 exports.ProductController = {
     insertIntoDB,
+    FileInsertIntoDB,
     getAllFromDB,
     getByIdFromDB,
     updateOneInDB,
     deleteByIdFromDB,
     getAvailableFromDB,
+    getInventoryReportFromDB,
+    getRemainderFromDB,
+    getRemainderCountFromDB,
+    getEmptyFromDB,
 };

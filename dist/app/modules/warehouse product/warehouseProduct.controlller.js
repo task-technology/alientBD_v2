@@ -21,7 +21,18 @@ const sendResponse_1 = __importDefault(require("../../../shared/sendResponse"));
 const warehouseProduct_constant_1 = require("./warehouseProduct.constant");
 const warehouseProduct_service_1 = require("./warehouseProduct.service");
 const insertIntoDB = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield warehouseProduct_service_1.warehouseProductService.insertIntoDB(req.body);
+    const user = req.user;
+    const result = yield warehouseProduct_service_1.warehouseProductService.insertIntoDB(req.body, user);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'product quantity updated successfully',
+        data: result,
+    });
+}));
+const FileInsertIntoDB = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = req.user;
+    const result = yield warehouseProduct_service_1.warehouseProductService.MultiInsertIntoDB(req.body, user);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
@@ -31,6 +42,9 @@ const insertIntoDB = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, v
 }));
 const getAllFromDB = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const filters = (0, pick_1.default)(req.query, warehouseProduct_constant_1.productFilterableFields);
+    if (filters.warehouseId) {
+        filters.warehouseId = parseInt(filters.warehouseId, 10);
+    }
     const options = (0, pick_1.default)(req.query, pagination_1.paginationFields);
     const result = yield warehouseProduct_service_1.warehouseProductService.getAllFromDB(filters, options);
     (0, sendResponse_1.default)(res, {
@@ -62,6 +76,16 @@ const checkQtyFromDB = (0, catchAsync_1.default)((req, res) => __awaiter(void 0,
         data: result,
     });
 }));
+const updateOneInDB = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = req.user;
+    const result = yield warehouseProduct_service_1.warehouseProductService.updateIntoDB(req.body, user);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'warehouse updated successfully',
+        data: result,
+    });
+}));
 const getwarehouseProductcountromDB = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield warehouseProduct_service_1.warehouseProductService.getBywarehouseProductCountFromDB();
     (0, sendResponse_1.default)(res, {
@@ -75,6 +99,8 @@ exports.warehouseProductController = {
     insertIntoDB,
     getAllFromDB,
     getByIdFromDB,
+    updateOneInDB,
     getwarehouseProductcountromDB,
-    // deleteFromDB
+    checkQtyFromDB,
+    FileInsertIntoDB
 };

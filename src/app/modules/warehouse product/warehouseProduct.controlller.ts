@@ -73,6 +73,17 @@ const checkQtyFromDB = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const updateOneInDB = catchAsync(async (req: Request, res: Response) => {
+  const user = req.user;
+  const result = await warehouseProductService.updateIntoDB(req.body,user as any);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'warehouse updated successfully',
+    data: result,
+  });
+});
+
 const getwarehouseProductcountromDB = catchAsync(
   async (req: Request, res: Response) => {
     const result =
@@ -90,6 +101,7 @@ export const warehouseProductController = {
   insertIntoDB,
   getAllFromDB,
   getByIdFromDB,
+  updateOneInDB,
   getwarehouseProductcountromDB,
   checkQtyFromDB,
   FileInsertIntoDB

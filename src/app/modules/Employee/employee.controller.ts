@@ -14,7 +14,7 @@ const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Students fetched successfully',
+    message: 'Users fetched successfully',
     meta: result.meta,
     data: result.data,
   });
