@@ -4,8 +4,8 @@ import { paginationFields } from '../../../constants/pagination';
 import catchAsync from '../../../shared/catchAsync';
 import pick from '../../../shared/pick';
 import sendResponse from '../../../shared/sendResponse';
-import { EmployeeFilterableFields } from './employee.constant';
-import { EmployeeService } from './employee.service';
+import { EmployeeFilterableFields } from './scrap.constant';
+import { EmployeeService } from './scrap.service';
 
 const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
   const filters = pick(req.query, EmployeeFilterableFields);

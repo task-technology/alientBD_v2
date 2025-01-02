@@ -2,7 +2,7 @@ import { Power, User } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import config from '../../../config';
 import prisma from '../../../shared/prisma';
-import { CreateUserInput } from '../Employee/employee.interface';
+import { CreateUserInput } from '../scrap/scrap.interface';
 
 const insertIntoDB = async (
   data: CreateUserInput,

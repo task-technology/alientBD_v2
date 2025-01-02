@@ -3,8 +3,10 @@ import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import prisma from '../../../shared/prisma';
-import { IEmployeeFilterRequest } from '../Employee/employee.interface';
+import { IEmployeeFilterRequest } from '../scrap/scrap.interface';
 
+import httpStatus from 'http-status';
+import ApiError from '../../../errors/ApiError';
 import { CustomerSearchableFields } from './customer.constant';
 import { CustomerCreatedEvent } from './customer.interface';
 
@@ -59,8 +61,8 @@ const getAllFromDB = async (
       options.sortBy && options.sortOrder
         ? { [options.sortBy]: options.sortOrder }
         : {
-            createdAt: 'desc',
-          },
+          createdAt: 'desc',
+        },
   });
 
   const total = await prisma.customer.count({
@@ -86,8 +88,23 @@ const getByIdFromDB = async (id: number): Promise<Customer | null> => {
   return result;
 };
 
+const deleteFromDB = async (id: string): Promise<Customer> => {
+  const result = await prisma.customer.delete({
+    where: {
+      id: parseInt(id),
+    },
+  });
+
+  if (!result) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'user not found');
+  }
+  return result;
+};
+
+
 export const CustomerService = {
   insertIntoDB,
   getAllFromDB,
   getByIdFromDB,
+  deleteFromDB
 };

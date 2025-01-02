@@ -5,9 +5,9 @@ import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import prisma from '../../../shared/prisma';
-import { IEmployeeFilterRequest } from '../Employee/employee.interface';
-import { IOrderCreatedEvent } from './order.interface';
-import { generateOrderId } from './order.utilis';
+import { IEmployeeFilterRequest } from '../scrap/scrap.interface';
+import { IOrderCreatedEvent } from './buffer-out.interface';
+import { generateOrderId } from './buffer-out.utilis';
 
 const insertIntoDB = async (data: IOrderCreatedEvent): Promise<Order> => {
   const id = await generateOrderId();

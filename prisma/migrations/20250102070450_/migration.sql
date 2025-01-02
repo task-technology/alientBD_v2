@@ -11,10 +11,19 @@ CREATE TABLE "users" (
 );
 
 -- CreateTable
+CREATE TABLE "powers" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+
+    CONSTRAINT "powers_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "userDetails" (
     "id" SERIAL NOT NULL,
     "userId" INTEGER NOT NULL,
     "name" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
     "designation" TEXT NOT NULL,
     "role" TEXT NOT NULL,
     "contactNo" TEXT NOT NULL,
@@ -42,9 +51,11 @@ CREATE TABLE "customers" (
 CREATE TABLE "products" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "brand" TEXT NOT NULL,
-    "purchaseCost" DOUBLE PRECISION NOT NULL,
-    "unit" TEXT NOT NULL,
+    "alternativeName" TEXT,
+    "model" TEXT NOT NULL,
+    "category" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "remarks" TEXT,
     "availableQty" INTEGER NOT NULL DEFAULT 0,
     "totalPurchased" INTEGER NOT NULL DEFAULT 0,
     "remainderQty" INTEGER NOT NULL DEFAULT 0,
@@ -66,62 +77,66 @@ CREATE TABLE "warehouses" (
 );
 
 -- CreateTable
-CREATE TABLE "warehouseProducts" (
+CREATE TABLE "inventory" (
     "id" SERIAL NOT NULL,
     "warehouseId" INTEGER NOT NULL,
     "productId" INTEGER NOT NULL,
-    "quantity" DOUBLE PRECISION NOT NULL,
+    "quantity" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "warehouseProducts_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "inventory_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "warehouseProductLogs" (
+CREATE TABLE "buffer_in" (
     "id" SERIAL NOT NULL,
     "warehouseId" INTEGER NOT NULL,
     "productId" INTEGER NOT NULL,
-    "quantity" DOUBLE PRECISION NOT NULL,
+    "quantity" INTEGER NOT NULL DEFAULT 0,
     "userId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "warehouseProductLogs_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "buffer_in_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "orders" (
+CREATE TABLE "buffer_out" (
     "id" SERIAL NOT NULL,
     "invoiceId" TEXT NOT NULL,
     "warehouseId" INTEGER NOT NULL,
     "customerId" INTEGER NOT NULL,
-    "inchargeId" INTEGER NOT NULL,
     "createdById" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "orders_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "buffer_out_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "orderProducts" (
+CREATE TABLE "buffer_out_product" (
     "id" SERIAL NOT NULL,
-    "orderId" INTEGER NOT NULL,
+    "bufferOutId" INTEGER NOT NULL,
     "productId" INTEGER NOT NULL,
-    "quantity" DOUBLE PRECISION NOT NULL,
+    "quantity" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "orderProducts_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "buffer_out_product_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "powers" (
+CREATE TABLE "scraps" (
     "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
+    "productId" INTEGER NOT NULL,
+    "quantity" INTEGER NOT NULL DEFAULT 0,
+    "reason" TEXT NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "powers_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "scraps_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -132,6 +147,9 @@ CREATE TABLE "_UserDetailsPowers" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "powers_name_key" ON "powers"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "userDetails_userId_key" ON "userDetails"("userId");
@@ -146,16 +164,13 @@ CREATE UNIQUE INDEX "customers_email_key" ON "customers"("email");
 CREATE UNIQUE INDEX "customers_contactNo_email_key" ON "customers"("contactNo", "email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "products_name_brand_key" ON "products"("name", "brand");
+CREATE UNIQUE INDEX "products_name_model_key" ON "products"("name", "model");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "warehouses_name_key" ON "warehouses"("name");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "warehouseProducts_warehouseId_productId_key" ON "warehouseProducts"("warehouseId", "productId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "powers_name_key" ON "powers"("name");
+CREATE UNIQUE INDEX "inventory_warehouseId_productId_key" ON "inventory"("warehouseId", "productId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_UserDetailsPowers_AB_unique" ON "_UserDetailsPowers"("A", "B");
@@ -167,37 +182,40 @@ CREATE INDEX "_UserDetailsPowers_B_index" ON "_UserDetailsPowers"("B");
 ALTER TABLE "userDetails" ADD CONSTRAINT "userDetails_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "warehouseProducts" ADD CONSTRAINT "warehouseProducts_warehouseId_fkey" FOREIGN KEY ("warehouseId") REFERENCES "warehouses"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "inventory" ADD CONSTRAINT "inventory_warehouseId_fkey" FOREIGN KEY ("warehouseId") REFERENCES "warehouses"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "warehouseProducts" ADD CONSTRAINT "warehouseProducts_productId_fkey" FOREIGN KEY ("productId") REFERENCES "products"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "inventory" ADD CONSTRAINT "inventory_productId_fkey" FOREIGN KEY ("productId") REFERENCES "products"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "warehouseProductLogs" ADD CONSTRAINT "warehouseProductLogs_warehouseId_fkey" FOREIGN KEY ("warehouseId") REFERENCES "warehouses"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "buffer_in" ADD CONSTRAINT "buffer_in_warehouseId_fkey" FOREIGN KEY ("warehouseId") REFERENCES "warehouses"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "warehouseProductLogs" ADD CONSTRAINT "warehouseProductLogs_productId_fkey" FOREIGN KEY ("productId") REFERENCES "products"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "buffer_in" ADD CONSTRAINT "buffer_in_productId_fkey" FOREIGN KEY ("productId") REFERENCES "products"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "warehouseProductLogs" ADD CONSTRAINT "warehouseProductLogs_userId_fkey" FOREIGN KEY ("userId") REFERENCES "userDetails"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "buffer_in" ADD CONSTRAINT "buffer_in_userId_fkey" FOREIGN KEY ("userId") REFERENCES "userDetails"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "orders" ADD CONSTRAINT "orders_warehouseId_fkey" FOREIGN KEY ("warehouseId") REFERENCES "warehouses"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "buffer_out" ADD CONSTRAINT "buffer_out_warehouseId_fkey" FOREIGN KEY ("warehouseId") REFERENCES "warehouses"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "orders" ADD CONSTRAINT "orders_customerId_fkey" FOREIGN KEY ("customerId") REFERENCES "customers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "buffer_out" ADD CONSTRAINT "buffer_out_customerId_fkey" FOREIGN KEY ("customerId") REFERENCES "customers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "orders" ADD CONSTRAINT "orders_inchargeId_fkey" FOREIGN KEY ("inchargeId") REFERENCES "customers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "buffer_out" ADD CONSTRAINT "buffer_out_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "userDetails"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "orders" ADD CONSTRAINT "orders_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "userDetails"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "buffer_out_product" ADD CONSTRAINT "buffer_out_product_bufferOutId_fkey" FOREIGN KEY ("bufferOutId") REFERENCES "buffer_out"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "orderProducts" ADD CONSTRAINT "orderProducts_orderId_fkey" FOREIGN KEY ("orderId") REFERENCES "orders"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "buffer_out_product" ADD CONSTRAINT "buffer_out_product_productId_fkey" FOREIGN KEY ("productId") REFERENCES "products"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "orderProducts" ADD CONSTRAINT "orderProducts_productId_fkey" FOREIGN KEY ("productId") REFERENCES "products"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "scraps" ADD CONSTRAINT "scraps_productId_fkey" FOREIGN KEY ("productId") REFERENCES "products"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "scraps" ADD CONSTRAINT "scraps_userId_fkey" FOREIGN KEY ("userId") REFERENCES "userDetails"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_UserDetailsPowers" ADD CONSTRAINT "_UserDetailsPowers_A_fkey" FOREIGN KEY ("A") REFERENCES "powers"("id") ON DELETE CASCADE ON UPDATE CASCADE;

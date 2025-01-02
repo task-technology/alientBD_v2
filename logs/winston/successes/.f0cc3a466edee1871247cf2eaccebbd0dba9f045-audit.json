@@ -1,0 +1,25 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "D:\\NEC Group\\alientBD\\alientBD v4\\alientBD prisma backend\\logs\\winston\\successes\\.f0cc3a466edee1871247cf2eaccebbd0dba9f045-audit.json",
+    "files": [
+        {
+            "date": 1735796756552,
+            "name": "D:\\NEC Group\\alientBD\\alientBD v4\\alientBD prisma backend\\logs\\winston\\successes\\phu-2025-02-01-11-success.log",
+            "hash": "d41710f8b5a2880d32e9a8121cef5a182a0c50937514768313c17806ebbbcb09"
+        },
+        {
+            "date": 1735801109713,
+            "name": "D:\\NEC Group\\alientBD\\alientBD v4\\alientBD prisma backend\\logs\\winston\\successes\\phu-2025-02-01-12-success.log",
+            "hash": "4c5f2736db6b574d9a46e7beac432d6b4031512662b5187dbf0d5f860b8068e2"
+        },
+        {
+            "date": 1735801494768,
+            "name": "D:\\NEC Group\\alientBD\\alientBD v4\\alientBD prisma backend\\logs\\winston\\successes\\phu-2025-02-01-13-success.log",
+            "hash": "916ebf3ddf129616bf95adccabe6f1db1f324ac9536bbcff4681fb3fe0af1f21"
+        }
+    ],
+    "hashType": "sha256"
+}

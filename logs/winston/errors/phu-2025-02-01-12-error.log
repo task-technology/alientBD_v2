@@ -1,0 +1,63 @@
+Thu Jan 02 2025 12:14:17 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+The table `public.users` does not exist in the current database.
+Thu Jan 02 2025 12:14:58 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ invalid signature
+Thu Jan 02 2025 12:14:58 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ invalid signature
+Thu Jan 02 2025 12:14:58 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ invalid signature
+Thu Jan 02 2025 12:14:58 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ 
+Invalid `prisma.product.count()` invocation:
+
+
+The table `public.products` does not exist in the current database.
+Thu Jan 02 2025 12:15:2 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ invalid signature
+Thu Jan 02 2025 12:15:2 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ invalid signature
+Thu Jan 02 2025 12:15:2 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ invalid signature
+Thu Jan 02 2025 12:15:2 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ 
+Invalid `prisma.product.count()` invocation:
+
+
+The table `public.products` does not exist in the current database.
+Thu Jan 02 2025 12:15:4 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ invalid signature
+Thu Jan 02 2025 12:15:5 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ invalid signature
+Thu Jan 02 2025 12:15:19 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ invalid signature
+Thu Jan 02 2025 12:15:23 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ invalid signature
+Thu Jan 02 2025 12:15:26 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ invalid signature
+Thu Jan 02 2025 12:15:40 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ invalid signature
+Thu Jan 02 2025 12:15:40 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ invalid signature
+Thu Jan 02 2025 12:15:40 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ 
+Invalid `prisma.product.count()` invocation:
+
+
+The table `public.products` does not exist in the current database.
+Thu Jan 02 2025 12:16:2 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ invalid signature
+Thu Jan 02 2025 12:16:2 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ invalid signature
+Thu Jan 02 2025 12:16:2 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ 
+Invalid `prisma.product.count()` invocation:
+
+
+The table `public.products` does not exist in the current database.
+Thu Jan 02 2025 12:16:2 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ invalid signature
+Thu Jan 02 2025 12:16:4 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ invalid signature
+Thu Jan 02 2025 12:16:20 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ invalid signature
+Thu Jan 02 2025 12:16:33 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ invalid signature
+Thu Jan 02 2025 12:16:58 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ invalid signature
+Thu Jan 02 2025 12:18:54 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ invalid signature
+Thu Jan 02 2025 12:23:19 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ invalid signature
+Thu Jan 02 2025 12:23:19 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ invalid signature
+Thu Jan 02 2025 12:23:19 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ invalid signature
+Thu Jan 02 2025 12:23:19 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ 
+Invalid `prisma.product.count()` invocation:
+
+
+The table `public.products` does not exist in the current database.
+Thu Jan 02 2025 12:23:20 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ invalid signature
+Thu Jan 02 2025 12:25:10 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ invalid signature
+Thu Jan 02 2025 12:30:46 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ invalid signature
+Thu Jan 02 2025 12:30:46 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ invalid signature
+Thu Jan 02 2025 12:30:46 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ 
+Invalid `prisma.product.count()` invocation:
+
+
+The table `public.products` does not exist in the current database.

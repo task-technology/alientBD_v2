@@ -4,8 +4,8 @@ import { paginationFields } from '../../../constants/pagination';
 import catchAsync from '../../../shared/catchAsync';
 import pick from '../../../shared/pick';
 import sendResponse from '../../../shared/sendResponse';
-import { orderFilterableFields } from './order.constant';
-import { orderService } from './order.service';
+import { orderFilterableFields } from './buffer-out.constant';
+import { orderService } from './buffer-out.service';
 
 const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
   const result = await orderService.insertIntoDB(req.body);

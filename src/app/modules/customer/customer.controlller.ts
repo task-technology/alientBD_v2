@@ -42,10 +42,21 @@ const getByIdFromDB = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const deleteFromDB = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await CustomerService.deleteFromDB(id);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User deleted successfully',
+    data: result,
+  });
+});
+
 export const CustomerController = {
   insertIntoDB,
   getAllFromDB,
   getByIdFromDB,
   // updateIntoDB,
-  // deleteFromDB
+  deleteFromDB
 };

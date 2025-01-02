@@ -5,8 +5,8 @@ import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import prisma from '../../../shared/prisma';
-import { EmployeeSearchableFields } from './employee.constant';
-import { CreateUserInput, IEmployeeFilterRequest } from './employee.interface';
+import { EmployeeSearchableFields } from './scrap.constant';
+import { CreateUserInput, IEmployeeFilterRequest } from './scrap.interface';
 
 const getAllFromDB = async (
   filters: IEmployeeFilterRequest,

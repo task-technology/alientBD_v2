@@ -1,9 +1,9 @@
 import express from 'express';
-import { employeeRoutes } from '../modules/Employee/employee.routes';
 import { AuthRoutes } from '../modules/auth/auth.route';
+import { orderRoutes } from '../modules/buffer out/buffer-out.routes';
 import { customerRoutes } from '../modules/customer/customer.routes';
-import { orderRoutes } from '../modules/order/order.routes';
 import { productRoutes } from '../modules/products/product.routes';
+import { employeeRoutes } from '../modules/scrap/scrap.routes';
 import { UserRoutes } from '../modules/user/user.routes';
 import { warehouseLogsRoutes } from '../modules/warehouse logs/warehouseLogs.routes';
 import { warehouseProductRoutes } from '../modules/warehouse product/warehouseProduct.routes';

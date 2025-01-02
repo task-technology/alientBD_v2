@@ -3,7 +3,7 @@ import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import prisma from '../../../shared/prisma';
-import { IEmployeeFilterRequest } from '../Employee/employee.interface';
+import { IEmployeeFilterRequest } from '../scrap/scrap.interface';
 import { productSearchableFields } from './product.constant';
 import { ProductCreatedEvent } from './product.interface';
 
